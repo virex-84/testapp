@@ -1,0 +1,14 @@
+//- about.pug
+extends layouts/main
+
+include includes/mixins
+
+block title
+    h1= t('logs')
+    
+block ads
+    p="ads"
+
+block content
+    if log
+        +listlog(log)

@@ -1,0 +1,23 @@
+//- main.pug
+doctype html
+html
+  head
+    //- заголовок сайта в config.json application title  
+    title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    //-link(href='https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/public/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/public/css/main.css', rel='stylesheet')
+  body
+    //- script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+    div.container
+        div(id="mainmenu")
+            include ../includes/mainnavbar
+        div(id="title")
+            block title
+        div(id="ads")
+            block ads
+        div.wrapper(id="content")
+            block content
+        div(id="footer")
+            include footer.pug

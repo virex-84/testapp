@@ -1,0 +1,201 @@
+mixin mainnavbar(items)
+  ul.mainnavbar
+    each item in items
+      li
+        a(href=item["link"])= t(item["name"])
+
+mixin navbar(classname,items)
+  ul(class=classname)
+    each item in items
+      li
+        - if (item["name"]=='mail' && mailcount!=null )
+          a(href=item["link"])= t(item["name"])+" ("+mailcount+")"
+        - else
+          a(href=item["link"])= t(item["name"])
+
+mixin listusers(items)
+  table.users
+    thead
+      tr
+        th #
+        th= t('username')
+        th= t('role')
+        th= t('e-mail')
+        th= t('from')
+        th= t('account created')
+        th= t('account updated')
+        th #        
+    tbody
+      each item,index in items
+        tr
+          td= index+1
+          td= item.username
+          td= item.role
+          td= item.email
+          td= item.token_system
+          td= item.created
+          td= item.updated
+          td
+            if item.username!=user.username
+              form(action="/users/delete",method="GET")
+                input(type="hidden",name="_id",value=item._id)
+                input(type="hidden",name="username",value=item.username)
+                a(href="Delete"): button(type="submit") Delete
+
+mixin listdatabases(items)
+  table.databases
+    thead
+      tr
+        th #
+        th= t('database name')
+        th= t('size')
+        th= t('is empty')
+        th # 
+        th # 
+    tbody
+      each item,index in items
+        tr
+          td= index+1
+          td= item.name
+          td= item.sizeOnDisk
+          td= t(item.empty)
+          td          
+            a(href="users/databaseedit?name="+item.name)=t("edit")          
+          td          
+            a(href="users/databasedelete?name="+item.name)=t("delete")          
+
+mixin listtables(items)
+  table.tables
+    thead
+      tr
+        th #
+        th #
+        th= t('table name')
+    tbody
+      each item,index in items
+        tr
+          td= index+1
+          td= item.name
+          td          
+            a(href="users/tableedit?name="+item.name)=t("edit")          
+
+mixin listzodiak(items)
+  table.zodiak
+    thead
+      tr
+        th= t('zodiakinfo')        
+        th= t('description')
+    tbody
+      each item,index in items
+        tr
+          td= t(item.name)
+          - arr=[]
+          each citem,cindex in item
+            - arr.push(citem.name)
+          td= arr.join(', ')
+          
+mixin listarticlesold(items)
+  table.zodiak
+    thead
+      tr
+        th= t('title')
+        th #
+        th #
+    tbody
+      each item,index in items
+        tr
+          td= item.title
+          td
+            a(href="/articles/read/"+item._id)=t("read")
+          td
+            a(href="/articles/edit/"+item._id)=t("edit")
+            
+//- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
+mixin listarticles(items)
+  dev.sidebar-nav
+    //div.sidebar-header text
+    ul.list-unstyled.components    
+      each item in articles
+        li.list-group-item
+          a(href="/articles/read/"+item._id)=item.title+'   '
+            if user
+              if user.role==1
+                span.pull-right
+                  a(href="/articles/edit/"+item._id)
+                    div.glyphicon.glyphicon-pencil
+                span.pull-right
+                  a(href="/articles/delete/"+item._id)
+                    div.glyphicon.glyphicon-remove    
+                    
+         
+mixin listlog(items)
+  dev.sidebar-nav
+    //div.sidebar-header text
+    ul.list-group
+      each item in items.length ? items : ['There are no values']
+        li.list-group-item
+          small= item
+
+mixin edittable(tablename,items)
+  table.tables(width="100%")
+    thead
+      tr
+        th #
+        th id
+        th= t('Value')
+        th= t('Save')
+        th= t('Delete')
+    tbody
+      each item,index in items
+        tr
+          form(action="/users/rowedit",method="GET")
+            input(type="hidden",name="tablename",value=tablename)
+            td= index+1
+            td
+              input(name="id", value=item.id)
+              input(type="hidden",name="_id",value=item._id)
+            td(width="100%")
+              input(name="value",value=item.name)
+            td
+              a(href="Save"): button(type="submit") Save
+          form(action="/users/rowdelete",method="GET")
+            td
+              input(type="hidden",name="tablename",value=tablename)
+              input(type="hidden",name="_id",value=item._id)
+              a(href="Delete"): button(type="submit") Delete
+  form(action="/users/rowadd",method="GET")
+    input(type="hidden",name="tablename",value=tablename)
+    a(href="Add"): button(type="submit") Add
+
+mixin listmail(mail)
+  table.mail
+    thead
+      tr
+        th= t('user')        
+        th= t('message')
+        th #
+    tbody
+      each item,index in mail.messages
+        tr
+          form(action="/users/maildelete",method="GET")
+            td= item.from.username
+            td= item.message
+            td
+              input(type="hidden",name="_id",value=item._id)
+              a(href="Delete"): button(type="submit")=t('Delete')
+  form(action="/users/mailaddmessage",method="GET")
+    table.sendmessage
+      tr
+        td= t('recipient')
+        td
+      tr(width="100%")
+        td
+          select(name="_id")
+            for item in mail.users
+              option(value=item._id) #{item.username}
+        td
+      tr
+        td
+          textarea(rows="4",cols="60", name='message', placeholder=t('insert message'))
+        td
+          a(href="Send"): button(type="submit")=t('Send') 

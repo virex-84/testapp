@@ -1,0 +1,14 @@
+dev.sidebar-nav
+    div.sidebar-header
+        if user.userpic
+            img.userpic(src=user.userpic)
+        else
+            img.userpic(src="/public/images/default-userpic.png")
+    ul.list-unstyled.components
+        each item in usernavigation
+            li.list-group-item
+                - if (item["name"]=='mail' && mailcount!=null )
+                    a(href=item["link"])= t(item["name"])
+                         span.pull-right= mailcount
+                - else
+                    a(href=item["link"])= t(item["name"])

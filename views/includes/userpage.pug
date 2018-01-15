@@ -1,0 +1,23 @@
+include mixins
+include usersidebar
+dev.container
+    p= user.username
+    p= user.secondName+' '+user.firstName+' '+user.threeName
+    if user.born
+        p= user.born.getDate()+"."+(user.born.getMonth() + 1) + "."+user.born.getFullYear()
+    p= t('gender')+': '+t(user.gender)
+
+    if profile
+        include profileform.pug
+    
+    if message
+        h2= message
+    
+    if Zodiak
+        +listzodiak(Zodiak)
+        
+    if Numerology
+        +listzodiak(Numerology)    
+        
+    if Mail
+        +listmail(Mail)

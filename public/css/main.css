@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    align-items: stretch;
+
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;    
+}
+
+.list-group{
+    max-height: 300px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+#footer {
+    margin-left: 50%;
+    clear: both;
+    height:50px;
+}
+
+.userpic {
+  object-fit: cover;
+  width: 200px;
+  /* border-radius: 100px; /* Радиус скругления */
+}
+
+#signupcontent > div {
+    display: none;
+}
+
+#signupcontent > div:target {
+    display: block;
+}

@@ -1,0 +1,27 @@
+//- about.pug
+extends layouts/main
+
+include includes/mixins
+
+block title
+    h1= t('articles')
+    
+block ads
+    p="ads"
+
+block content
+    if articles
+        if articles.length>0
+            +listarticles(articles)
+
+            if article
+                if article.command=="read"
+                    h3= article.title
+                    p= article.text
+                if article.command=="edit"
+                    include includes/articleform.pug
+        else
+            p= t('Will see you soon articles')
+
+    if message
+        h2= message

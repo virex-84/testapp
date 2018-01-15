@@ -1,0 +1,44 @@
+h3= t('profile')
+form(id="signup", encType="multipart/form-data", method='post', action='/users/profile')
+	dd
+		if user.userpic
+			img.userpic(align="middle", src=user.userpic)
+		else
+			img.userpic(src="/images/default-userpic.png")
+		dt= t('userpic')
+		dd
+			input(type='file', name='userpic')
+		dt= t('firstname')
+		dd
+			input(type='text', name='firstname', value=profile.firstName, placeholder=t('insert firstname'))
+		dt= t('secondname')
+		dd
+			input(type='text', name='secondname', value=profile.secondName, placeholder=t('insert secondname'))
+		dt= t('threename')
+		dd
+			input(type='text', name='threename', value=profile.threeName, placeholder=t('insert threename'))
+		dt= t('borndate')
+		dd
+			- var userborn
+			- if (user.born) userborn=profile.born.toISOString().slice(0, 10);
+			input(type='date', name='born', value=userborn, required, placeholder=t('insert born'))
+		dt= t('sex')
+		dd
+			select(name='sex')
+				option(value='man' selected=(profile.sex==="man"))= t('man')
+				option(value='woman' selected=(profile.sex==="woman"))= t('woman')				
+		dt= t('username')
+		dd
+			input(type='text', name='name', value=profile.username, placeholder=t('insert username'))
+		dt= t('password')
+		dd
+			input(type='password', name='password', placeholder=t('insert password'))
+		dt= t('e-mail')
+		dd
+			input(type='text', name='email', value=profile.email, placeholder=t('insert e-mail'))
+		dt= t('locale')			
+		dd
+			select(name='locale')
+				option(value='ru' selected=(profile.locale==="ru"))= t('russian')
+				option(value='en' selected=(profile.locale==="en"))= t('english')				
+		input(type='submit')

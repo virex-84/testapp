@@ -1,0 +1,5 @@
+div.navbar.navbar-default
+    ul.nav.navbar-nav
+        each item in mainnavigation
+            li.list-group-item
+                a(href=item["link"])= t(item["name"])

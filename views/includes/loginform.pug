@@ -1,0 +1,16 @@
+h3= t('login')
+form(id="login", method='post', action='/users/login')
+	dl
+		dt= t('username')
+		dd
+			input(type='text', name='name', placeholder=t('insert username'))
+		dt= t('password')
+		dd
+			input(type='password', name='password', placeholder=t('insert password'))
+		dd
+			input(type='submit')
+a(href="users/auth/yandex"): button(type="submit")=t('Yandex')
+a(href="users/auth/mailru"): button(type="submit")=t('Mail.ru')
+a(href="users/auth/google"): button(type="submit")=t('Google')
+a(href="users/auth/ok"): button(type="submit")=t('Odnoklassniki')
+a(href="users/auth/vk"): button(type="submit")=t('Vkontakte')

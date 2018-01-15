@@ -1,0 +1,12 @@
+h3= t('article')
+form(id="article", method='post', action='/articles')
+	input(type="hidden",name="id",value=article._id)
+	dl
+		dt= t('title')
+		dd
+			input(type='text', name='title', required, value=article.title, placeholder=t('insert title'))
+		dt= t('text')
+		dd
+			textarea(rows="4",cols="60", name='text', placeholder=t('insert text'))=article.text
+		dd
+			input(type='submit')

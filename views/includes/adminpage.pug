@@ -1,0 +1,26 @@
+include mixins
+include usersidebar
+dev.container
+    h1= user.username
+    p.
+        hi admin
+    
+    if message
+        h2= message    
+
+    if users
+        +listusers(users)
+
+    if databases
+        +listdatabases(databases)
+    
+    if tables
+        +listtables(tables)
+
+    if tableedit
+        p= tableedit
+        p= t(tableedit)
+        +edittable(tableedit,rows)
+
+    if Mail
+        +listmail(Mail)
