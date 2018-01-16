@@ -1,12 +1,7 @@
 include mixins
 include usersidebar
 dev.container
-    h1= user.username
-    p.
-        hi admin
-    
-    if message
-        h2= message    
+    p= user.username
 
     if users
         +listusers(users)

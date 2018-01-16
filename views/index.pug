@@ -2,7 +2,7 @@
 extends layouts/main
 
 block title
-	h1= t('home')
+	h2= t('home')
 
 //- показываем рекламный блок только пользователям
 //- или всем незалогиненым
@@ -21,4 +21,4 @@ block content
 		else
 			include includes/userpage.pug
 	else
-		include includes/mainpage.pug
+		include includes/hellopage.pug

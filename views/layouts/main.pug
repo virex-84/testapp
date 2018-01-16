@@ -4,20 +4,27 @@ html
   head
     //- заголовок сайта в config.json application title  
     title= title
+    meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     //-link(href='https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
     link(href='/public/css/bootstrap.min.css', rel='stylesheet')
     link(href='/public/css/main.css', rel='stylesheet')
+    //-script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    //-script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    //-script(src='/public/js/jquery.min.js')
+    //-script(src='/public/js/bootstrap.min.js')
   body
-    //- script(src='https://code.jquery.com/jquery-3.1.1.min.js')
     div.container
         div(id="mainmenu")
             include ../includes/mainnavbar
-        div(id="title")
-            block title
-        div(id="ads")
-            block ads
-        div.wrapper(id="content")
-            block content
+        div.jumbotron
+            div(id="title")
+                block title
+            div(id="ads")
+                block ads
+            div.wrapper(id="content")
+                block content
+            if message
+                include ../includes/message
         div(id="footer")
             include footer.pug

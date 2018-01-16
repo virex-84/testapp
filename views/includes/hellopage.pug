@@ -1,0 +1,15 @@
+row
+    pre
+        | expres
+        | i18n
+        | pug
+        | bootstrap v3.1.1
+    a(href="#login")=t("login")
+    |  или 
+    a(href="#registration")=t("registration")
+
+    div(id="signupcontent")
+        div(id="login")
+            include loginform.pug
+        div(id="registration")
+            include registrationform.pug

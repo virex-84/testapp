@@ -6,33 +6,31 @@
 //
 //================
 
-// Объявление глобальных переменных
+// объявление глобальных переменных
 var
 express = require('express'),
 app = express(),
-//храним на клиенте только сессию
+// храним на клиенте только сессию
 session = require('express-session'),
 bodyParser  = require('body-parser'),
 path = require('path'),
 favicon = require('serve-favicon'),
-//локализация
+// локализация
 i18n = require("i18n"),
 util = require('util');
 
 
-//иконка
-//app.use(express.favicon());
-//app.use(express.favicon('public/images/favicon.ico'));
+// иконка
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 
-//статические файлы (скрипты, стили и т.д.)
+// статические файлы (скрипты, стили и т.д.)
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-//для безопасности
+// для безопасности
 app.disable('x-powered-by');
 // ? app.disable('etag');
 
-//Шаблонизатор set view engine
+// шаблонизатор set view engine
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');//pug бывший jade
 
@@ -42,11 +40,25 @@ if (app.get('env') === 'production') {
   session.cookie.secure = true; // serve secure cookies
 }
 if (app.get('env') === 'development') {
-  //"красивый" вывод html (с табуляцией)
+  // "красивый" вывод html (с табуляцией)
   app.locals.pretty = true;
 }
 
-//конфигурация локализатора
+app.set('trust proxy', 1); // для сохранения куки сессии в клинтском браузере
+app.use(session({
+    secret: 'keyboard cat',//подпись для исключения подделки сессий
+    key: 'asdfgh',
+    cookie: {
+            "path": "/",
+            "httpOnly": true,
+            "maxAge"  : 3600000,
+            secure: true
+            },
+    saveUninitialized: true,             //сохранять пустые сессии
+    resave: false,                       //пересохранять если нет изменений  
+}));
+
+// конфигурация локализатора
 i18n.configure({
     locales:['en', 'ru'],
     directory: __dirname + '/locales',
@@ -58,14 +70,15 @@ i18n.configure({
     register: global
 });
 
-//инициализация локализатора
+// инициализация локализатора
 app.use(i18n.init);
 
 
-//разборка body
+// разборка body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// небольшой класс для вывода списка лога
 class PublicLog {
     constructor() {
         // always initialize all instance properties
@@ -81,37 +94,142 @@ class PublicLog {
 
 var publicLog=new PublicLog();
 
+function newmessage(text,type){
+  var message={};
+  message.text=text;
+  message.type=type;
+  return message;
+}
+
 // выполняется при каждом запросе, кроме ошибки
 app.use(function (req, res, next) {
+  
     // установка локали
     if (req.session)
-      if (req.session.user)
-        if (req.session.user.locale) {
-        }
+      if (req.session.locale){
+        i18n.setLocale(req, req.session.locale);
+      }
+      
     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log('%s IP %s; method %s; URL %s',new Date().toISOString(),ip, req.url,req.method);
     publicLog.addLine(util.format('%s IP %s; method %s; URL %s',new Date().toISOString(),ip, req.url,req.method));
     next();
 });
 
-function prepareData(){
+// помечаем меню выделением
+function checkActive(data,currentLink){
+    var keys = Object.keys( data );
+    for( var i = 0,length = keys.length; i < length; i++ ) {
+        data[ keys[ i ] ];
+        if (data[ keys[ i ] ].link==currentLink)
+          data[ keys[ i ] ].active=true;
+        if (data[ keys[ i ] ].submenu!=undefined)
+          checkActive(data[ keys[ i ] ].submenu,currentLink);
+    }  
+}
+
+// добавление данных для вывода 
+function prepareData(currentLink){
   var data={};
   data.log=publicLog.getLines();
-  data.title='text web page';
-  data.mainnavigation=[{
-    name:"home",
-    link:"/"
-  },{name:"articles",
-    link:"/articles"
-  },{name:"about",
-    link:"/about"
-  },{name:"error",
-    link:"/error"
-  },{name:"log",
-    link:"/log"
-  }    
-  ];
+  data.title='Sample pug & bootstrap';
   
+  data.mainnavigation=
+  [
+    {
+    name:"home",
+    link:"",
+    submenu:[
+      {
+        name:"home (admin)",
+        link:"/?userrole=admin"
+      },
+      {
+        name:"home (user)",
+        link:"/?userrole=user"
+      },
+      ]
+    },
+    {
+    name:"articles",
+    link:"",
+    submenu:[
+      {
+        name:"articles (admin)",
+        link:"/articles?userrole=admin"
+      },
+      {
+        name:"articles (user)",
+        link:"/articles?userrole=user"
+      },
+      ]
+    },
+    {
+    name:"tree",
+    link:"",
+    submenu:[
+      {
+        name:"treeA",
+        link:"/treeA",
+      },
+      {
+        name:"treeB",
+        link:"",
+        submenu:[
+          {
+            name:"treeC",
+            link:"/treeC",
+          },
+          {
+            name:"treeD",
+            link:"/treeD",
+          },            
+          {
+          name:"treeE",
+          link:"/treeE",
+          submenu:[
+            {
+            name:"treeF",
+            link:"/treeF"
+            }
+            ]
+          }
+      ]
+      }
+      ]
+    },    
+    {
+      name:"broken",
+      link:"/broken",      
+    },
+    {
+      name:"error",
+      link:"/error",      
+    },
+    {
+      name:"log",
+      link:"/log",      
+    },
+    {
+      name:"about",
+      link:"/about",      
+    },
+    {
+      name:"language",
+      link:"",
+      submenu:[
+        {
+          name:"english",
+          link:"/?lang=en"
+        },
+        {
+          name:"russian",
+          link:"/?lang=ru"
+        }        
+      ]
+    }, 
+  ];
+
   data.articles=[{
     _id:"1",
     title:"title1",
@@ -134,7 +252,7 @@ function prepareData(){
   data.user.threeName='Иванович';
   data.user.born=new Date();
   data.user.gender='male';
-  data.user.role=1;
+  data.user.role=0;
   data.mailcount=3;
   data.usernavigation=[{
     name:"mail",
@@ -146,25 +264,53 @@ function prepareData(){
     link:"link2"
   }];
   
-  //delete  data.user;
-  
+  //помечаем текущий линк в меню
+  if (currentLink)
+    checkActive(data.mainnavigation,currentLink);
+
   return data;
 }
 
-//пути route
+// пути route
 app.route(['/','/:resource'])
   .get((req, res) => {
-   //throw new Error('example error text');
-    
-    var data=prepareData();
-    
     var resource=req.params["resource"];
+    
+    if (resource=='error') throw new Error('example error text');     
+    
+    var data=prepareData(req.originalUrl);
+    
+    // сохраняем в сессии только поддерживаемые локали
+    if (req.query["lang"]){
+      if (i18n.getLocales().indexOf(req.query["lang"])>-1){
+        req.session.locale=req.query["lang"];
+        i18n.setLocale(req, req.session.locale);
+      }
+    }
+    
+    // в зависимости от роли - показываем сообщение-приветствие
+    var userrole=req.query["userrole"];
+    switch (userrole) {
+      case 'admin':
+        data.user.role=1;
+        data.message=newmessage('hi admin!','info');
+        break;
+      case 'user':
+        data.user.role=2;
+        data.message=newmessage('hi user!','success');
+        break;
+      default:
+        delete data.user;
+    } 
+
+    //загружаем ресурс
     if (resource){
       res.render(resource,data, function(err, html) {
         if(err) {
-          //res.redirect('404'); // File doesn't exist
-          //res.send(404);
-          res.render('404',data);
+          //res.render('404',data);
+          data.message=newmessage(err.message,'warning');
+          res.render('error', data);
+          return;
         } else {
           res.send(html);
         }
@@ -176,15 +322,15 @@ app.route(['/','/:resource'])
   .put()
   .delete();
   
-//главный route, содержит перенаправление на 404 при остальных запросах
-//для остальных запросов
-app.get('*', function(req, res, next){
+// главный route, содержит перенаправление на 404 при остальных запросах
+// (не добавленных ранее маршрутов)
+app.all('*', function (req, res, next) {
     var data=prepareData();
     res.render('404',data);
 });
 
-//обработка ошибок
-// Все обработчики ошибок должны иметь 4 параметра, иначе они будут обычными контроллерами
+// обработка ошибок
+// все обработчики ошибок должны иметь 4 параметра, иначе они будут обычными контроллерами
 app.use(function(err,req,res,next)
 {
 
@@ -192,34 +338,18 @@ app.use(function(err,req,res,next)
       res.status(err.status).send({ error: err.message });
     } else {
 
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
-
       // render the error page
       res.status(err.status || 500);
-      var data=prepareData();
-      res.render('error',data); 
+      var data=prepareData(req.originalUrl);
+      data.message=newmessage(err.message,'danger');
+      res.render('error',data);
+      return;
     }
     next();
 });
 
 
-//обработка ошибок
-// Все обработчики ошибок должны иметь 4 параметра, иначе они будут обычными контроллерами
-module.exports = function(err,req,res,next)
-{
-    if (req.xhr) {
-      res.status(err.status).send({ error: err.message });
-    } else {
-      // render the error page
-      res.status(err.status || 500);
-      res.render('error'); 
-    }
-    next();
-};
-
-//запуск сервера
+// запуск сервера
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
   console.log('Сервер запущен '+process.env.PORT || 3000);
 });

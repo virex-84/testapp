@@ -9,6 +9,7 @@ form(id="login", method='post', action='/users/login')
 			input(type='password', name='password', placeholder=t('insert password'))
 		dd
 			input(type='submit')
+			
 a(href="users/auth/yandex"): button(type="submit")=t('Yandex')
 a(href="users/auth/mailru"): button(type="submit")=t('Mail.ru')
 a(href="users/auth/google"): button(type="submit")=t('Google')

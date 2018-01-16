@@ -22,11 +22,11 @@ form(id="signup", encType="multipart/form-data", method='post', action='/users/p
 			- var userborn
 			- if (user.born) userborn=profile.born.toISOString().slice(0, 10);
 			input(type='date', name='born', value=userborn, required, placeholder=t('insert born'))
-		dt= t('sex')
+		dt= t('gender')
 		dd
-			select(name='sex')
-				option(value='man' selected=(profile.sex==="man"))= t('man')
-				option(value='woman' selected=(profile.sex==="woman"))= t('woman')				
+			select(name='gender')
+				option(value='male' selected=(profile.sex==="male"))= t('male')
+				option(value='female' selected=(profile.sex==="female"))= t('female')				
 		dt= t('username')
 		dd
 			input(type='text', name='name', value=profile.username, placeholder=t('insert username'))

@@ -1,0 +1,14 @@
+- cls="alert alert-"+message.type
+div(class=cls)
+    case message.type
+        when 'success'
+            strong=t('info')
+        when 'info'
+            strong=t('info')
+        when 'warning'
+            strong=t('warning')
+        when 'danger'      
+            strong=t('danger')
+        default
+            string=t('?')
+    pre= message.text

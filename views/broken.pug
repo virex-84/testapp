@@ -9,7 +9,7 @@ block title
 //- показываем рекламный блок только пользователям
 //- или всем незалогиненым
 block ads
-    if user
+ if user
         if user.role==1
         else
             include includes/ads.pug

@@ -1,5 +1,12 @@
+include mixins
+
 div.navbar.navbar-default
+    div.navbar-header
+        a.navbar-brand(href="/")= title
     ul.nav.navbar-nav
         each item in mainnavigation
-            li.list-group-item
-                a(href=item["link"])= t(item["name"])
+            if item.submenu
+                +subitem(item)
+            else
+                li(class=(item.active ? 'active' : ''))
+                    a(href=item["link"])= t(item["name"])

@@ -15,6 +15,17 @@
     -webkit-overflow-scrolling: touch;
 }
 
+
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
+
+
 #footer {
     margin-left: 50%;
     clear: both;
