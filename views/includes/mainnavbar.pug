@@ -6,7 +6,8 @@ div.navbar.navbar-default
     ul.nav.navbar-nav
         each item in mainnavigation
             if item.submenu
-                +subitem(item)
+                li.dropdown
+                    +subitem(item,true)
             else
                 li(class=(item.active ? 'active' : ''))
                     a(href=item["link"])= t(item["name"])

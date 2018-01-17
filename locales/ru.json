@@ -47,8 +47,6 @@
 	"warning": "Внимание",
 	"articles (user)": "Статьи (пользователь)",
 	"language": "Язык",
-	"english": "english",
-	"russian": "русский",
 	"tree": "tree",
 	"log": "Лог посещений",
 	"treeA": "treeA",
@@ -56,5 +54,9 @@
 	"treeC": "treeC",
 	"treeD": "treeD",
 	"treeE": "treeE",
-	"treeF": "treeF"
+	"treeF": "treeF",
+	"en": "english",
+	"ru": "русский",
+	"edit": "Редактировать",
+	"remove": "Удалить"
 }

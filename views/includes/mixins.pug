@@ -1,15 +1,15 @@
-mixin subitem(subitem)
-  li.dropdown
-    a(href='#')= t(subitem["name"])
+mixin subitem(subitem,needcaret)
+  a.dropdown-toggle(data-toggle="dropdown",href='#')= t(subitem["name"])
+    if needcaret
       span.caret
-    ul.dropdown-menu
-      each item in subitem.submenu
-        if item.submenu
-          ul.dropdown-submenu
-            +subitem(item)
-        else      
-          li(class=(item.active ? 'active' : ''))
-            a(href=item["link"])= t(item["name"])  
+  ul.dropdown-menu.multi-level(role="menu" aria-labelledby="dropdownMenu")
+    each item in subitem.submenu
+      if item.submenu
+        li.dropdown-submenu
+          +subitem(item)
+      else      
+        li(class=(item.active ? 'active' : ''))
+          a(href=item["link"])= t(item["name"])              
 
 //- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
 mixin listarticles(items)
@@ -23,10 +23,10 @@ mixin listarticles(items)
               if user.role==1
                 span.pull-right
                   a(href="/articles/edit/"+item._id)
-                    div.glyphicon.glyphicon-pencil
+                    i.glyphicon.glyphicon-pencil(title=t("edit"))
                 span.pull-right
                   a(href="/articles/delete/"+item._id)
-                    div.glyphicon.glyphicon-remove    
+                    i.glyphicon.glyphicon-remove(title=t("remove"))   
                     
          
 mixin listlog(items)

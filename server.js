@@ -7,7 +7,7 @@
 //================
 
 // объявление глобальных переменных
-var
+const
 express = require('express'),
 app = express(),
 // храним на клиенте только сессию
@@ -36,15 +36,15 @@ app.set('view engine', 'pug');//pug бывший jade
 
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1); // trust first proxy
+  app.set('trust proxy', 1); // для сохранения куки сессии в клиентском браузере
   session.cookie.secure = true; // serve secure cookies
 }
 if (app.get('env') === 'development') {
-  // "красивый" вывод html (с табуляцией)
-  app.locals.pretty = true;
+  app.set('trust proxy', 1); // для сохранения куки сессии в клиентском браузере
+  app.locals.pretty = true;  // для PUG - "красивый" вывод html (с табуляцией)
 }
 
-app.set('trust proxy', 1); // для сохранения куки сессии в клинтском браузере
+// конфигурация сессии
 app.use(session({
     secret: 'keyboard cat',//подпись для исключения подделки сессий
     key: 'asdfgh',
@@ -54,8 +54,8 @@ app.use(session({
             "maxAge"  : 3600000,
             secure: true
             },
-    saveUninitialized: true,             //сохранять пустые сессии
-    resave: false,                       //пересохранять если нет изменений  
+    saveUninitialized: true, //сохранять пустые сессии
+    resave: false,           //пересохранять если нет изменений  
 }));
 
 // конфигурация локализатора
@@ -73,7 +73,6 @@ i18n.configure({
 // инициализация локализатора
 app.use(i18n.init);
 
-
 // разборка body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -81,7 +80,6 @@ app.use(bodyParser.json());
 // небольшой класс для вывода списка лога
 class PublicLog {
     constructor() {
-        // always initialize all instance properties
         this.items = [];
     }
     addLine(text) {
@@ -92,10 +90,11 @@ class PublicLog {
     }
 }
 
-var publicLog=new PublicLog();
+let publicLog=new PublicLog();
 
+// формирования сообщения для вывода в pug->bootstrap
 function newmessage(text,type){
-  var message={};
+  let message={};
   message.text=text;
   message.type=type;
   return message;
@@ -109,16 +108,18 @@ app.use(function (req, res, next) {
       if (req.session.locale){
         i18n.setLocale(req, req.session.locale);
       }
-      
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    console.log('%s IP %s; method %s; URL %s',new Date().toISOString(),ip, req.url,req.method);
-    publicLog.addLine(util.format('%s IP %s; method %s; URL %s',new Date().toISOString(),ip, req.url,req.method));
+   
+    // логирование   
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log('%s IP %s; %s %s',new Date().toISOString(), ip, req.method, req.url);
+    publicLog.addLine(util.format('%s IP %s; %s %s',new Date().toISOString(), ip, req.method, req.url));
+    
     next();
 });
 
 // помечаем меню выделением
 function checkActive(data,currentLink){
-    var keys = Object.keys( data );
+    let keys = Object.keys( data );
     for( var i = 0,length = keys.length; i < length; i++ ) {
         data[ keys[ i ] ];
         if (data[ keys[ i ] ].link==currentLink)
@@ -130,10 +131,11 @@ function checkActive(data,currentLink){
 
 // добавление данных для вывода 
 function prepareData(currentLink){
-  var data={};
+  let data={};
   data.log=publicLog.getLines();
   data.title='Sample pug & bootstrap';
   
+  //главное меню, навигация
   data.mainnavigation=
   [
     {
@@ -213,7 +215,9 @@ function prepareData(currentLink){
     {
       name:"about",
       link:"/about",      
-    },
+    }
+    /*
+    ,
     {
       name:"language",
       link:"",
@@ -228,8 +232,10 @@ function prepareData(currentLink){
         }        
       ]
     }, 
+    */
   ];
 
+  //статьи
   data.articles=[{
     _id:"1",
     title:"title1",
@@ -245,6 +251,7 @@ function prepareData(currentLink){
     text:"text1"
   };  
 
+  //пользователь
   data.user={};
   data.user.username='user000';
   data.user.secondName='Иванов';
@@ -264,7 +271,22 @@ function prepareData(currentLink){
     link:"link2"
   }];
   
-  //помечаем текущий линк в меню
+  //добавляем все доступные локали в главное меню
+  let langmenu={
+    name:'language',
+    link:'',
+    submenu:[]
+  };  
+  for (var item of i18n.getLocales()){
+    langmenu.submenu.push({
+    name:item,
+    link:'/?lang='+item,
+    }
+    );
+  }
+  data.mainnavigation.push(langmenu);  
+  
+  //помечаем(выделяем) текущий линк(ресурс) в главном меню
   if (currentLink)
     checkActive(data.mainnavigation,currentLink);
 
@@ -274,13 +296,15 @@ function prepareData(currentLink){
 // пути route
 app.route(['/','/:resource'])
   .get((req, res) => {
-    var resource=req.params["resource"];
+    let resource=req.params["resource"];
     
-    if (resource=='error') throw new Error('example error text');     
+    // произвольная ошибка для теста
+    if (resource=='error') throw new Error('Example error text');     
     
-    var data=prepareData(req.originalUrl);
+    //добавляем данные для pug шаблонизатора
+    let data=prepareData(req.originalUrl);
     
-    // сохраняем в сессии только поддерживаемые локали
+    // сохраняем в сессию только поддерживаемые локали
     if (req.query["lang"]){
       if (i18n.getLocales().indexOf(req.query["lang"])>-1){
         req.session.locale=req.query["lang"];
@@ -289,7 +313,7 @@ app.route(['/','/:resource'])
     }
     
     // в зависимости от роли - показываем сообщение-приветствие
-    var userrole=req.query["userrole"];
+    let userrole=req.query["userrole"];
     switch (userrole) {
       case 'admin':
         data.user.role=1;
@@ -325,7 +349,7 @@ app.route(['/','/:resource'])
 // главный route, содержит перенаправление на 404 при остальных запросах
 // (не добавленных ранее маршрутов)
 app.all('*', function (req, res, next) {
-    var data=prepareData();
+    let data=prepareData();
     res.render('404',data);
 });
 
@@ -333,21 +357,18 @@ app.all('*', function (req, res, next) {
 // все обработчики ошибок должны иметь 4 параметра, иначе они будут обычными контроллерами
 app.use(function(err,req,res,next)
 {
-
     if (req.xhr) {
       res.status(err.status).send({ error: err.message });
     } else {
-
       // render the error page
       res.status(err.status || 500);
-      var data=prepareData(req.originalUrl);
+      let data=prepareData(req.originalUrl);
       data.message=newmessage(err.message,'danger');
       res.render('error',data);
       return;
     }
     next();
 });
-
 
 // запуск сервера
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
