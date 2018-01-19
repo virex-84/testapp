@@ -1,0 +1,20 @@
+/*
+ * Social Buttons for Bootstrap Addon
+ *
+ * Licensed under the MIT License
+ *
+ * https://github.com/lipis/bootstrap-social
+ */
+.btn-mailru{color:#fff;background-color:#168de2;border-color:rgba(0,0,0,0.2)}.btn-mailru:focus,.btn-mailru.focus{color:#fff;background-color:#168de2;border-color:rgba(0,0,0,0.2)}
+.btn-mailru:hover{color:#fff;background-color:#1582d1;border-color:rgba(0,0,0,0.2)}
+.btn-mailru:active,.btn-mailru.active,.open>.dropdown-toggle.btn-mailru{color:#fff;background-color:#168de2;border-color:rgba(0,0,0,0.2)}.btn-mailru:active:hover,.btn-mailru.active:hover,.open>.dropdown-toggle.btn-mailru:hover,.btn-mailru:active:focus,.btn-mailru.active:focus,.open>.dropdown-toggle.btn-mailru:focus,.btn-mailru:active.focus,.btn-mailru.active.focus,.open>.dropdown-toggle.btn-mailru.focus{color:#fff;background-color:#168de2;border-color:rgba(0,0,0,0.2)}
+.btn-mailru:active,.btn-mailru.active,.open>.dropdown-toggle.btn-mailru{background-image:none}
+.btn-mailru.disabled:hover,.btn-mailru[disabled]:hover,fieldset[disabled] .btn-mailru:hover,.btn-mailru.disabled:focus,.btn-mailru[disabled]:focus,fieldset[disabled] .btn-mailru:focus,.btn-mailru.disabled.focus,.btn-mailru[disabled].focus,fieldset[disabled] .btn-mailru.focus{background-color:#1582d1;border-color:rgba(0,0,0,0.2)}
+.btn-mailru .badge{color:#168de2;background-color:#fff}
+
+.btn-yandex{color:#fff;background-color:#e61400;border-color:rgba(0,0,0,0.2)}.btn-yandex:focus,.btn-yandex.focus{color:#fff;background-color:#cc1100;border-color:rgba(0,0,0,0.2)}
+.btn-yandex:hover{color:#fff;background-color:#cc1100;border-color:rgba(0,0,0,0.2)}
+.btn-yandex:active,.btn-yandex.active,.open>.dropdown-toggle.btn-yandex{color:#fff;background-color:#e61400;border-color:rgba(0,0,0,0.2)}.btn-yandex:active:hover,.btn-yandex.active:hover,.open>.dropdown-toggle.btn-yandex:hover,.btn-yandex:active:focus,.btn-yandex.active:focus,.open>.dropdown-toggle.btn-yandex:focus,.btn-yandex:active.focus,.btn-yandex.active.focus,.open>.dropdown-toggle.btn-yandex.focus{color:#fff;background-color:#e61400;border-color:rgba(0,0,0,0.2)}
+.btn-yandex:active,.btn-yandex.active,.open>.dropdown-toggle.btn-yandex{background-image:none}
+.btn-yandex.disabled:hover,.btn-yandex[disabled]:hover,fieldset[disabled] .btn-yandex:hover,.btn-yandex.disabled:focus,.btn-yandex[disabled]:focus,fieldset[disabled] .btn-yandex:focus,.btn-yandex.disabled.focus,.btn-yandex[disabled].focus,fieldset[disabled] .btn-yandex.focus{background-color:#1582d1;border-color:rgba(0,0,0,0.2)}
+.btn-yandex .badge{color:#e61400;background-color:#fff}

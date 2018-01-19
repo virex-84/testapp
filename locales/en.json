@@ -45,5 +45,11 @@
 	"insert e-mail": "insert e-mail",
 	"edit": "edit",
 	"remove": "remove",
-	"info": "info"
+	"info": "info",
+	"mail": "mail",
+	"name1": "name1",
+	"name2": "name2",
+	"error.title": "error.title",
+	"warning": "warning",
+	"submit": "submit"
 }

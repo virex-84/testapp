@@ -43,7 +43,6 @@
     margin-right: -10px;
 }
 
-
 .dropdown-submenu.pull-left {
     float: none;
 }
@@ -56,20 +55,15 @@
     border-radius: 6px 0 6px 6px;
 }
 
+/*Авто-раскрытие подменю - неадекватно работает на android 4.1.1 chrome*/
 /*
 .dropdown-submenu:hover>.dropdown-menu {
     display: block;
 }
-
-.dropdown-submenu:hover>a:after {
-    border-left-color: #fff;
-}
 */
 
-#footer {
-    margin-left: 50%;
-    clear: both;
-    height:50px;
+.footer {
+    text-align: center;
 }
 
 .userpic {

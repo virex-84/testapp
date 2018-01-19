@@ -1,31 +1,31 @@
-h3= t('registration')
-form(id="signup", method='post', action='/users/registration')
-	dl
-		dt= t('firstname')
-		dd
-			input(type='text', name='firstname', placeholder=t('insert firstname'))
-		dt= t('secondname')
-		dd
-			input(type='text', name='secondname', placeholder=t('insert secondname'))
-		dt= t('threename')
-		dd
-			input(type='text', name='threename', placeholder=t('insert threename'))
-		dt= t('borndate')
-		dd
-			input(type='date', name='born', placeholder=t('insert born'))
-		dt= t('gender')
-		dd
-			select(name='gender')
-				option(value='man')= t('man')
-				option(value='woman')= t('woman')
-		dt= t('username')		
-		dd
-			input(type='text', name='name', placeholder=t('insert username'))
-		dt= t('password')
-		dd
-			input(type='password', name='password', placeholder=t('insert password'))
-		dt= t('e-mail')
-		dd
-			input(type='text', name='email', placeholder=t('insert e-mail'))
-		dd
-			input(type='submit')
+div.panel.panel-default
+	div.panel-heading= t('registration')
+	div.panel-body
+		form(id="signup", method='post', action='/users/registration')
+			div.form-group
+				label= t('firstname')
+				input.form-control(type='text', name='firstname', placeholder=t('insert firstname'))
+			div.form-group
+				label= t('secondname')
+				input.form-control(type='text', name='secondname', placeholder=t('insert secondname'))
+			div.form-group
+				label= t('threename')
+				input.form-control(type='text', name='threename', placeholder=t('insert threename'))
+			div.form-group
+				label= t('borndate')
+				input.form-control(type='date', name='born', placeholder=t('insert born'))
+			div.form-group
+				label= t('gender')
+				select.form-control(name='gender')
+						option(value='man')= t('man')
+						option(value='woman')= t('woman')
+			div.form-group
+				label= t('username')
+				input.form-control(type='text', name='name', placeholder=t('insert username') required)
+			div.form-group
+				label= t('password')
+				input.form-control(type='password', name='password', placeholder=t('insert password') required)
+			div.form-group
+				label= t('e-mail')
+				input.form-control(type='email', name='password', placeholder=t('insert e-mail') required)
+			button.btn.btn-primary(type='submit')= t('submit')

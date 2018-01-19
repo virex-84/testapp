@@ -1,17 +1,20 @@
-h3= t('login')
-form(id="login", method='post', action='/users/login')
-	dl
-		dt= t('username')
-		dd
-			input(type='text', name='name', placeholder=t('insert username'))
-		dt= t('password')
-		dd
-			input(type='password', name='password', placeholder=t('insert password'))
-		dd
-			input(type='submit')
-			
-a(href="users/auth/yandex"): button(type="submit")=t('Yandex')
-a(href="users/auth/mailru"): button(type="submit")=t('Mail.ru')
-a(href="users/auth/google"): button(type="submit")=t('Google')
-a(href="users/auth/ok"): button(type="submit")=t('Odnoklassniki')
-a(href="users/auth/vk"): button(type="submit")=t('Vkontakte')
+div.panel.panel-default
+	div.panel-heading= t('login')
+	div.panel-body
+		form(id="login", method='post', action='/users/login')
+			div.form-group
+				label= t('username')
+				input.form-control(type='text', name='name', placeholder=t('insert username') required)
+			div.form-group
+				label= t('password')
+				input.form-control(type='password', name='password', placeholder=t('insert password') required)
+			button.btn.btn-primary(type='submit')= t('submit')
+div.panel.panel-default
+	div.panel-heading= t('sign in with social network')
+	div.panel-body
+		div.btn-group(role="group" aria-label="Basic example")
+			a.btn.btn-yandex(href="users/auth/yandex")= t('Yandex')
+			a.btn.btn-mailru(href="users/auth/mailru")= t('Mail.ru')
+			a.btn.btn-google(href="users/auth/google")= t('Google')
+			a.btn.btn-odnoklassniki(href="users/auth/ok")= t('Odnoklassniki')
+			a.btn.btn-vk(href="users/auth/vk")= t('Vkontakte')

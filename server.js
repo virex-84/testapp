@@ -120,7 +120,7 @@ app.use(function (req, res, next) {
 // помечаем меню выделением
 function checkActive(data,currentLink){
     let keys = Object.keys( data );
-    for( var i = 0,length = keys.length; i < length; i++ ) {
+    for( let i = 0,length = keys.length; i < length; i++ ) {
         data[ keys[ i ] ];
         if (data[ keys[ i ] ].link==currentLink)
           data[ keys[ i ] ].active=true;
@@ -277,7 +277,7 @@ function prepareData(currentLink){
     link:'',
     submenu:[]
   };  
-  for (var item of i18n.getLocales()){
+  for (let item of i18n.getLocales()){
     langmenu.submenu.push({
     name:item,
     link:'/?lang='+item,
