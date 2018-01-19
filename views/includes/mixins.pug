@@ -15,20 +15,17 @@ mixin subitem(subitem,needcaret)
 mixin listarticles(items)
   dev.sidebar-nav
     //div.sidebar-header text
-    ul.list-unstyled.components    
+    input.form-control(id="listarticles" type="text" placeholder=t('insert text for search'))
+    ul.list-unstyled.components(id="listarticles")
       each item in articles
         li.list-group-item
-          a(href="/articles/read/"+item._id)=item.title+'   '
-            if user
-              if user.role==1
-                span.pull-right
-                  a(href="/articles/edit/"+item._id)
-                    i.glyphicon.glyphicon-pencil(title=t("edit"))
-                span.pull-right
-                  a(href="/articles/delete/"+item._id)
-                    i.glyphicon.glyphicon-remove(title=t("remove"))   
-                    
-         
+          a(href="/articles/read/"+item._id)=item.title
+          if user
+            if user.role==1
+              div.pull-right.action-buttons
+                a.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id title=t("edit"))
+                a.glyphicon.glyphicon-remove(href="/articles/delete/"+item._id title=t("remove"))
+
 mixin listlog(items)
   dev.sidebar-nav
     //div.sidebar-header text

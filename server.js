@@ -238,13 +238,26 @@ function prepareData(currentLink){
   //статьи
   data.articles=[{
     _id:"1",
-    title:"title1",
-    text:"text1"
+    title:"Title A",
+    text:"text1",
+    description:"some info about A"
   },{
     _id:"2",
-    title:"title2",
-    text:"text2"
-  }];
+    title:"Title B",
+    text:"text2",
+    description:"description from B"    
+  },{
+    _id:"3",
+    title:"Some title C",
+    text:"text3",
+    description:"bla-bla-bla"    
+  },{
+    _id:"3",
+    title:"About this site",
+    text:"text3",
+    description:"about text"    
+  },
+  ];
   
   data.article={
     title:"title1",

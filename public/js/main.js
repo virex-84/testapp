@@ -6,3 +6,12 @@
       e.preventDefault();
     });
   });
+
+  $(document).ready(function(){
+    $("#listarticles").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#listarticles li").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
