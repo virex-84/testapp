@@ -19,13 +19,23 @@ block ads
 block content
     if articles
         if articles.length>0
-            +listarticles(articles)
+            if user
+                if user.role==1
+                    //- +listarticlesadmin(articles)
+                    +listarticlesadmintable(articles)
+                else
+                    +listarticlesuser(articles)
+            else
+                +listarticlesuser(articles)
+    else
+        p= t('Will see you soon articles')
 
-            if article
-                if article.command=="read"
-                    h3= article.title
-                    p= article.text
-                if article.command=="edit"
-                    include includes/articleform.pug
-        else
-            p= t('Will see you soon articles')
+    if article
+        div.jumbotron
+            if article.command=="read"
+                h3= article.title
+                small= article.description
+                div.blockquote= article.text
+                    footer= article.author+" (c)"
+            if article.command=="edit"
+                include includes/articleform.pug

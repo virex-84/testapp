@@ -1,3 +1,4 @@
+//- подменю для mainnavbar
 mixin subitem(subitem,needcaret)
   a.dropdown-toggle(data-toggle="dropdown",href='#')= t(subitem["name"])
     if needcaret
@@ -12,19 +13,68 @@ mixin subitem(subitem,needcaret)
           a(href=item["link"])= t(item["name"])              
 
 //- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
-mixin listarticles(items)
-  dev.sidebar-nav
-    //div.sidebar-header text
-    input.form-control(id="listarticles" type="text" placeholder=t('insert text for search'))
-    ul.list-unstyled.components(id="listarticles")
+mixin listarticlesuser(items)
+  div.sidebar-nav
+    //-div.sidebar-header
+    input.form-control(id="listarticlesuser" type="text" placeholder=t('insert text for search'))
+    ul.list-unstyled.components(id="listarticlesuser")
+      each item in articles
+        a.list-group-item(href="/articles/read/"+item._id)=item.title
+
+//- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
+mixin listarticlesadmin(items)
+  div.sidebar-nav
+    //-div.sidebar-header
+    input.form-control(id="listarticleadmin" type="text" placeholder=t('insert text for search'))
+    ul.list-group(id="listarticleadmin")
+      a.list-group-item(href="/articles/new" title=t("new"))
+        i.glyphicon.glyphicon-plus
       each item in articles
         li.list-group-item
-          a(href="/articles/read/"+item._id)=item.title
+          a.btn(href="/articles/read/"+item._id)=item.title
           if user
             if user.role==1
               div.pull-right.action-buttons
-                a.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id title=t("edit"))
-                a.glyphicon.glyphicon-remove(href="/articles/delete/"+item._id title=t("remove"))
+                a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id title=t("edit"))
+                a.btn.glyphicon.glyphicon-trash(href="/articles/delete/"+item._id title=t("remove"))
+
+mixin listarticlesadmintable(items)
+  div.sidebar-nav
+    div.panel.panel-default.panel-table
+      input.form-control(id="listarticleadmintable" type="text" placeholder=t('insert text for search'))
+      div.panel-body
+        table.table.table-striped.table-hover
+          thead
+            tr
+              th.hidden-xs ID
+              th= t('title')
+              th.hidden-xs= t('description')
+              th.hidden-xs= t('author')              
+              th
+          tbody(id="listarticleadmintable")
+            tr
+              a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
+                i.glyphicon.glyphicon-plus
+            each item in articles
+              tr
+                td.hidden-xs=item._id
+                td(id="findtext")
+                  a(href="/articles/read/"+item._id+"?userrole=admin")=item.title
+                td.hidden-xs(id="findtext")=item.description
+                td.hidden-xs(id="findtext")=item.author                
+                td
+                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin", title=t("edit"))
+                  a.btn.glyphicon.glyphicon-trash(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
+      div.panel-footer
+        ul.pagination.hidden-xs
+          li
+            a(href="#") 1
+            a(href="#") 2
+            a(href="#") 3
+        ul.pager.visible-xs
+          li
+            a(href="#") &laquo;
+            a(href="#") &raquo;               
 
 mixin listlog(items)
   dev.sidebar-nav

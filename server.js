@@ -239,30 +239,29 @@ function prepareData(currentLink){
   data.articles=[{
     _id:"1",
     title:"Title A",
-    text:"text1",
-    description:"some info about A"
+    text:"text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1",
+    description:"some info about A",
+    author:"author1"
   },{
     _id:"2",
     title:"Title B",
-    text:"text2",
-    description:"description from B"    
+    text:"text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2",
+    description:"description from B",
+    author:"ivan"
   },{
     _id:"3",
     title:"Some title C",
-    text:"text3",
-    description:"bla-bla-bla"    
+    text:"text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3",
+    description:"bla-bla-bla",
+    author:"alex"
   },{
-    _id:"3",
+    _id:"4",
     title:"About this site",
-    text:"text3",
-    description:"about text"    
+    text:"text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4",
+    description:"about text",
+    author:"admin"
   },
   ];
-  
-  data.article={
-    title:"title1",
-    text:"text1"
-  };  
 
   //пользователь
   data.user={};
@@ -307,9 +306,12 @@ function prepareData(currentLink){
 }
 
 // пути route
-app.route(['/','/:resource'])
+app.route(['/','/:resource','/:resource/:command/:id'])
   .get((req, res) => {
     let resource=req.params["resource"];
+    let command=req.params["command"];
+    let id=req.params["id"];
+
     
     // произвольная ошибка для теста
     if (resource=='error') throw new Error('Example error text');     
@@ -340,8 +342,17 @@ app.route(['/','/:resource'])
         delete data.user;
     } 
 
-    //загружаем ресурс
+    // загружаем ресурс
     if (resource){
+      // загружаем статью из массива
+      if ((resource=='articles') && ((command=='read') || (command=='edit')) && (id)) {
+         data.article=data.articles.filter(function(item) { 
+          return item._id == id; 
+        })[0];
+        // если массив загружен - указываем команду для pug
+        if (data.article) data.article.command=command;
+      }
+      // рендер html страницы из шаблона
       res.render(resource,data, function(err, html) {
         if(err) {
           //res.render('404',data);

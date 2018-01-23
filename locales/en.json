@@ -52,5 +52,16 @@
 	"error.title": "error.title",
 	"warning": "warning",
 	"submit": "submit",
-	"sign in with social network": "sign in with social network"
+	"sign in with social network": "sign in with social network",
+	"insert text for search": "insert text for search",
+	"new": "new",
+	"title": "title",
+	"description": "description",
+	"author": "author",
+	"new article": "new article",
+	"article": "article",
+	"insert title": "insert title",
+	"insert description": "insert description",
+	"text": "text",
+	"insert text": "insert text"
 }

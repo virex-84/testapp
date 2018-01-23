@@ -30,7 +30,7 @@
 	"about": "О сайте",
 	"about.title": "О сайте",
 	"error": "Ошибка",
-	"title": "title",
+	"title": "Заголовок",
 	"404.title": "404",
 	"404.message": "Извините, такой страницы не существует",
 	"error.title": "Ошибка",
@@ -61,5 +61,14 @@
 	"remove": "Удалить",
 	"submit": "Отправить",
 	"sign in with social network": "Войти через соцсеть",
-	"insert text for search": "Введите текст для поиска"
+	"insert text for search": "Введите текст для поиска",
+	"text": "Текст",
+	"description": "Описание",
+	"author": "Автор",
+	"new article": "Новая статья",
+	"Will see you soon articles": "Скоро здесь будут новые статьи",
+	"article": "Статья",
+	"insert title": "Вставьте заголовок",
+	"insert text": "Вставьте текст",
+	"insert description": "insert description"
 }

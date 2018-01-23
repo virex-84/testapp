@@ -1,12 +1,15 @@
-h3= t('article')
-form(id="article", method='post', action='/articles')
-	input(type="hidden",name="id",value=article._id)
-	dl
-		dt= t('title')
-		dd
-			input(type='text', name='title', required, value=article.title, placeholder=t('insert title'))
-		dt= t('text')
-		dd
-			textarea(rows="4",cols="60", name='text', placeholder=t('insert text'))=article.text
-		dd
-			input(type='submit')
+div.panel.panel-default
+	div.panel-heading= t('article')
+	div.panel-body
+		form(id="article", method='post', action='/articles')
+			input(type="hidden",name="id",value=article._id)
+			div.form-group
+				label= t('title')
+				input.form-control(type='text', name='title', value=article.title, placeholder=t('insert title') required)
+			div.form-group
+				label= t('description')
+				input.form-control(type='text', name='description', value=article.description, placeholder=t('insert description') required)
+			div.form-group
+				label= t('text')
+				textarea.form-control(rows="4", cols="60", type='text', name='password',placeholder=t('insert text') required)=article.text
+			button.btn.btn-primary(type='submit')= t('submit')

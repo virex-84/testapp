@@ -6,9 +6,6 @@ dev.sidebar-nav
             img.userpic(src="/public/images/default-userpic.png")
     ul.list-unstyled.components
         each item in usernavigation
-            li.list-group-item
-                - if (item["name"]=='mail' && mailcount!=null )
-                    a(href=item["link"])= t(item["name"])
-                         span.pull-right= mailcount
-                - else
-                    a(href=item["link"])= t(item["name"])
+            a.list-group-item(href=item["link"])= t(item["name"])
+                if (item["name"]=='mail' && mailcount!=null )
+                    span.badge.badge-default.badge-pill= mailcount

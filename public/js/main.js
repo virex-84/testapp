@@ -7,11 +7,32 @@
     });
   });
 
+  // поиск статей для простого (пользовательского) списка
   $(document).ready(function(){
-    $("#listarticles").on("keyup", function() {
+    $("#listarticlesuser").on("keyup", function() {
       var value = $(this).val().toLowerCase();
-      $("#listarticles li").filter(function() {
+      $("#listarticlesuser a").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
+    });
+  });
+  
+  // поиск статей для простого (пользовательского) списка
+  $(document).ready(function(){
+    $("#listarticleadmin").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#listarticleadmin li").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });  
+  
+  // поиск статей в таблице для админа
+  $(document).ready(function(){
+    $("#listarticleadmintable").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#listarticleadmintable tr").filter(function() {
+        $(this).toggle($(this).find("#findtext").text().toLowerCase().indexOf(value) > -1)
+      });      
     });
   });
