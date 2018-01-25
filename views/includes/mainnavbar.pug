@@ -1,11 +1,16 @@
-div.navbar.navbar-default
+nav.navbar.navbar-default.navbar-fixed-top
     div.navbar-header
         a.navbar-brand(href="/")= title
-    ul.nav.navbar-nav
-        each item in mainnavigation
-            if item.submenu
-                li.dropdown
-                    +subitem(item,true)
-            else
-                li(class=(item.active ? 'active' : ''))
-                    a(href=item["link"])= t(item["name"])
+        button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-main")
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+    div.collapse.navbar-collapse(id="navbar-main")
+        ul.nav.navbar-nav
+            each item in mainnavigation
+                if item.submenu
+                    li.dropdown
+                        +subitem(item,true)
+                else
+                    li(class=(item.active ? 'active' : ''))
+                        a(href=item["link"])= t(item["name"])

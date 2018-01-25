@@ -79,3 +79,11 @@
 #signupcontent > div:target {
     display: block;
 }
+
+:target:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -70px; 
+  height: 70px; 
+  visibility: hidden; 
+}
