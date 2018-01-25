@@ -1,0 +1,14 @@
+//- mail.pug
+extends layouts/main
+
+block title
+    h2= t('mail')
+
+block content
+    if user
+        if user.mails
+            +listmail(user.mails,user.mailusers)
+        else
+            h3=t('no mail')
+    else
+        p=t('you are not logged')

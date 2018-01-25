@@ -1,13 +1,16 @@
 div.panel.panel-default
 	div.panel-heading= t('login')
-	div.panel-body
-		form(id="login", method='post', action='/users/login')
-			div.form-group
-				label= t('username')
+	form(id="login", method='post', action='/users/login')
+		div.panel-body
+			div.input-group
+				span.input-group-addon
+					i.glyphicon.glyphicon-user
 				input.form-control(type='text', name='name', placeholder=t('insert username') required)
-			div.form-group
-				label= t('password')
+			div.input-group
+				span.input-group-addon
+					i.glyphicon.glyphicon-lock
 				input.form-control(type='password', name='password', placeholder=t('insert password') required)
+		div.panel-footer
 			button.btn.btn-primary(type='submit')= t('submit')
 div.panel.panel-default
 	div.panel-heading= t('sign in with social network')

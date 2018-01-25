@@ -1,4 +1,6 @@
 //- main.pug
+include ../includes/mixins
+
 doctype html
 html
   head
@@ -20,11 +22,17 @@ html
         div.jumbotron
             div(id="title")
                 block title
-            div(id="ads")
-                block ads
+            //- показываем рекламный блок только пользователям
+            //- или всем незалогиненым
+            if user
+                if user.role==1
+                else
+                    include ../includes/ads.pug
+            else
+                include ../includes/ads.pug
             div.wrapper(id="content")
                 block content
             if message
-                include ../includes/message
+                +message(message.type,message.text)
         div.footer
             include footer.pug

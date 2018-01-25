@@ -12,6 +12,7 @@ mixin subitem(subitem,needcaret)
         li(class=(item.active ? 'active' : ''))
           a(href=item["link"])= t(item["name"])              
 
+//- список статей для пользователя (упрощенный)
 //- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
 mixin listarticlesuser(items)
   div.sidebar-nav
@@ -21,28 +22,28 @@ mixin listarticlesuser(items)
       each item in articles
         a.list-group-item(href="/articles/read/"+item._id)=item.title
 
-//- gliph https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp            
-mixin listarticlesadmin(items)
+//- список статей для админа (упрощенный)            
+mixin listarticlesadminv1(items)
   div.sidebar-nav
-    //-div.sidebar-header
+    //- div.sidebar-header
     input.form-control(id="listarticleadmin" type="text" placeholder=t('insert text for search'))
     ul.list-group(id="listarticleadmin")
-      a.list-group-item(href="/articles/new" title=t("new"))
-        i.glyphicon.glyphicon-plus
+      a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
+        i.glyphicon.glyphicon-plus.text-success
       each item in articles
         li.list-group-item
-          a.btn(href="/articles/read/"+item._id)=item.title
+          a.btn(href="/articles/read/"+item._id+"?userrole=admin")=item.title
           if user
             if user.role==1
               div.pull-right.action-buttons
-                a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id title=t("edit"))
-                a.btn.glyphicon.glyphicon-trash(href="/articles/delete/"+item._id title=t("remove"))
-
-mixin listarticlesadmintable(items)
+                a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin" title=t("edit"))
+                a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin" title=t("remove"))
+//- список статей для админа (2 версия)
+mixin listarticlesadmintablev2(items)
   div.sidebar-nav
     div.panel.panel-default.panel-table
       input.form-control(id="listarticleadmintable" type="text" placeholder=t('insert text for search'))
-      div.panel-body
+      div.panel-body.table-responsive
         table.table.table-striped.table-hover
           thead
             tr
@@ -51,10 +52,11 @@ mixin listarticlesadmintable(items)
               th.hidden-xs= t('description')
               th.hidden-xs= t('author')              
               th
+              th
           tbody(id="listarticleadmintable")
             tr
               a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
-                i.glyphicon.glyphicon-plus
+                i.glyphicon.glyphicon-plus.text-success
             each item in articles
               tr
                 td.hidden-xs=item._id
@@ -64,7 +66,8 @@ mixin listarticlesadmintable(items)
                 td.hidden-xs(id="findtext")=item.author                
                 td
                   a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin", title=t("edit"))
-                  a.btn.glyphicon.glyphicon-trash(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
+                td
+                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
       div.panel-footer
         ul.pagination.hidden-xs
           li
@@ -74,8 +77,52 @@ mixin listarticlesadmintable(items)
         ul.pager.visible-xs
           li
             a(href="#") &laquo;
-            a(href="#") &raquo;               
+            a(href="#") &raquo;
+//- список статей для админа (3 версия)
+mixin listarticlesadmintablev3(items)
+  div.sidebar-nav
+    div.panel.panel-default.filterable
+      div.panel-body.table-responsive
+        table.table.table-striped.table-hover
+          thead
+            tr.filters
+              th.hidden-xs
+                input.form-control(type="text" placeholder="ID")
+              th
+                input.form-control(type="text" placeholder=t('title'))
+              th.hidden-xs
+                input.form-control(type="text" placeholder=t('description'))
+              th.hidden-xs
+                input.form-control(type="text" placeholder=t('author'))          
+              th
+              th
+          tbody(id="listarticleadmintable")
+            tr
+              a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
+                i.glyphicon.glyphicon-plus.text-success
+            each item in articles
+              tr
+                td.hidden-xs=item._id
+                td
+                  a(href="/articles/read/"+item._id+"?userrole=admin")=item.title
+                td.hidden-xs(id="findtext")=item.description
+                td.hidden-xs(id="findtext")=item.author                
+                td
+                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin", title=t("edit"))
+                td
+                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
+      div.panel-footer
+        ul.pagination.hidden-xs
+          li
+            a(href="#") 1
+            a(href="#") 2
+            a(href="#") 3
+        ul.pager.visible-xs
+          li
+            a(href="#") &laquo;
+            a(href="#") &raquo;
 
+//- лог
 mixin listlog(items)
   dev.sidebar-nav
     //div.sidebar-header text
@@ -84,35 +131,63 @@ mixin listlog(items)
         li.list-group-item
           small= item
 
-mixin listmail(mail)
-  table.mail
-    thead
-      tr
-        th= t('user')        
-        th= t('message')
-        th #
-    tbody
-      each item,index in mail.messages
-        tr
-          form(action="/users/maildelete",method="GET")
-            td= item.from.username
-            td= item.message
-            td
-              input(type="hidden",name="_id",value=item._id)
-              a(href="Delete"): button(type="submit")=t('Delete')
-  form(action="/users/mailaddmessage",method="GET")
-    table.sendmessage
-      tr
-        td= t('recipient')
-        td
-      tr(width="100%")
-        td
-          select(name="_id")
-            for item in mail.users
+//- список писем и форма для отправки нового сообщения
+//- table-responsive для очень маленьких дисплеев - позволяет скроллировать слишком широкие строки
+mixin listmail(mail,users)
+  div.container
+    div.panel.panel-default.filterable
+      div.table-responsive
+        table.table.mail.table.table-striped.table-hover
+          thead
+            tr.filters
+              th
+                input.form-control(type="text" placeholder=t('user'))
+              th
+                input.form-control(type="text" placeholder=t('message'))
+              th
+              th
+          tbody
+            each item,index in mail
+              tr
+                td= item.from.username
+                td= item.message
+                td
+                  a.btn.btn-success.hidden-xs(href="/mail/reply/"+item._id)=t('reply')
+                  a.btn.glyphicon.glyphicon-share-alt.text-success.visible-xs(href="/mail/reply/"+item._id)              
+                td
+                  a.btn.btn-danger.hidden-xs(href="/mail/delete/"+item._id)=t('delete')
+                  a.btn.glyphicon.glyphicon-trash.text-danger.visible-xs(href="/mail/delete/"+item._id)
+    form.well(action="/mail/send",method="POST")
+      legend=t('send message')
+      div.form-group
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-user
+          select.form-control(name="_id")
+            for item in users
               option(value=item._id) #{item.username}
-        td
-      tr
-        td
-          textarea(rows="4",cols="60", name='message', placeholder=t('insert message'))
-        td
-          a(href="Send"): button(type="submit")=t('Send') 
+      div.form-group
+        div.input-group
+          span.input-group-addon
+            i.glyphicon.glyphicon-pencil          
+          textarea.form-control(rows="4",name='message', placeholder=t('insert message') required)
+      div.form-group
+        button.btn.btn-warning(type='submit')= t('submit')
+          span.glyphicon.glyphicon-send
+
+//- вывод блока сообщения
+mixin message(type,text)
+  - cls="alert alert-"+type
+  div(class=cls)
+      case message.type
+          when 'success'
+              strong=t('info')
+          when 'info'
+              strong=t('info')
+          when 'warning'
+              strong=t('warning')
+          when 'danger'      
+              strong=t('danger')
+          default
+              string=t('?')
+      pre= text

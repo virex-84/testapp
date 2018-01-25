@@ -149,9 +149,13 @@ function prepareData(currentLink){
       {
         name:"home (user)",
         link:"/?userrole=user"
-      },
+      }
       ]
     },
+    {
+      name:"mail",
+      link:"/mail?userrole=user"
+    },       
     {
     name:"articles",
     link:"",
@@ -263,6 +267,8 @@ function prepareData(currentLink){
   },
   ];
 
+
+
   //пользователь
   data.user={};
   data.user.username='user000';
@@ -272,16 +278,52 @@ function prepareData(currentLink){
   data.user.born=new Date();
   data.user.gender='male';
   data.user.role=0;
-  data.mailcount=3;
+  
   data.usernavigation=[{
     name:"mail",
-    link:"link1"
+    link:"mail/?userrole=user"
   },{name:"name1",
     link:"link2"
   }
   ,{name:"name2",
     link:"link2"
   }];
+  
+  
+  //эл.почта
+  //список пользователей для отправки почты
+  let mailusers=[];
+  mailusers.push({
+    _id:1,
+    username:"user001"
+  });
+  mailusers.push({
+    _id:2,
+    username:"user002"
+  });
+  //письма-сообщения
+  let mails=[];
+  mails.push({
+    _id:1,
+    from:{username:"user001"},
+    message:"hello!"
+  });
+  mails.push({
+    _id:2,
+    from:{username:"user002"},
+    message:"message from user002!"
+  });
+  mails.push({
+    _id:3,
+    from:{username:"user002"},
+    message:"how do you do?!"
+  });   
+  
+  data.user.mails=mails;
+  data.user.mailusers=mailusers;
+  //количество сообщений
+  data.user.mailcount=mails.length;
+  
   
   //добавляем все доступные локали в главное меню
   let langmenu={

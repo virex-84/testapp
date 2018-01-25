@@ -1,37 +1,27 @@
 //- articles.pug
 extends layouts/main
 
-include includes/mixins
-
 block title
     h2= t('articles')
-
-//- показываем рекламный блок только пользователям
-//- или всем незалогиненым
-block ads
-    if user
-        if user.role==1
-        else
-            include includes/ads.pug
-    else
-        include includes/ads.pug
 
 block content
     if articles
         if articles.length>0
             if user
                 if user.role==1
-                    //- +listarticlesadmin(articles)
-                    +listarticlesadmintable(articles)
+                    div.container
+                        +listarticlesadminv1(articles)
+                        +listarticlesadmintablev2(articles)
+                        +listarticlesadmintablev3(articles)
                 else
                     +listarticlesuser(articles)
             else
                 +listarticlesuser(articles)
     else
         p= t('Will see you soon articles')
-
-    if article
-        div.jumbotron
+    
+    div.jumbotron    
+        if article
             if article.command=="read"
                 h3= article.title
                 small= article.description
@@ -39,3 +29,5 @@ block content
                     footer= article.author+" (c)"
             if article.command=="edit"
                 include includes/articleform.pug
+        else
+            h3=t('please select article from menu')

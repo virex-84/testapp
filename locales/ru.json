@@ -70,5 +70,15 @@
 	"article": "Статья",
 	"insert title": "Вставьте заголовок",
 	"insert text": "Вставьте текст",
-	"insert description": "insert description"
+	"insert description": "Вставьте описание",
+	"user": "Пользователь",
+	"message": "Сообщение",
+	"delete": "Удалить",
+	"recipient": "Получатель",
+	"insert message": "Вставьте сообщение",
+	"send": "Отправить",
+	"you are not logged": "Вы не залогинены",
+	"send message": "Отправить сообщение",
+	"reply": "Ответить",
+	"please select article from menu": "Пожалуйста, выберите интересующую вас статью"
 }

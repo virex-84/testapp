@@ -7,5 +7,5 @@ dev.sidebar-nav
     ul.list-unstyled.components
         each item in usernavigation
             a.list-group-item(href=item["link"])= t(item["name"])
-                if (item["name"]=='mail' && mailcount!=null )
-                    span.badge.badge-default.badge-pill= mailcount
+                if (item["name"]=='mail' && user.mailcount!=null )
+                    span.badge.badge-default.badge-pill= user.mailcount
