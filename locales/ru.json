@@ -80,5 +80,7 @@
 	"you are not logged": "Вы не залогинены",
 	"send message": "Отправить сообщение",
 	"reply": "Ответить",
-	"please select article from menu": "Пожалуйста, выберите интересующую вас статью"
+	"please select article from menu": "Пожалуйста, выберите интересующую вас статью",
+	"search": "Поиск",
+	"other": "Разное"
 }

@@ -1,4 +1,4 @@
-.wrapper {
+.content {
     display: flex;
     align-items: stretch;
 
@@ -8,7 +8,7 @@
     transition: all 0.5s ease;    
 }
 
-.list-group{
+.list-group {
     max-height: 300px;
     margin-bottom: 10px;
     overflow:scroll;

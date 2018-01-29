@@ -136,6 +136,7 @@ function prepareData(currentLink){
   let data={};
   data.log=publicLog.getLines();
   data.title='Sample pug & bootstrap';
+  data.messages=[];
   
   //главное меню, навигация
   data.mainnavigation=
@@ -151,25 +152,25 @@ function prepareData(currentLink){
       {
         name:"home (user)",
         link:"/?userrole=user"
-      }
-      ]
-    },
-    {
-      name:"mail",
-      link:"/mail?userrole=user"
-    },       
-    {
-    name:"articles",
-    link:"",
-    submenu:[
-      {
-        name:"articles (admin)",
-        link:"/articles?userrole=admin"
       },
       {
-        name:"articles (user)",
-        link:"/articles?userrole=user"
+        name:"mail",
+        link:"/mail?userrole=user"
       },
+      {
+        name:"articles",
+        link:"",
+        submenu:[
+        {
+          name:"articles (admin)",
+          link:"/articles?userrole=admin"
+        },
+        {
+          name:"articles (user)",
+          link:"/articles?userrole=user"
+        },
+        ]
+      },      
       ]
     },
     {
@@ -205,40 +206,29 @@ function prepareData(currentLink){
       ]
       }
       ]
-    },    
-    {
-      name:"broken",
-      link:"/broken",      
     },
     {
-      name:"error",
-      link:"/error",      
-    },
-    {
-      name:"log",
-      link:"/log",      
+      name:"other",
+      link:"",
+      submenu:[
+        {
+          name:"broken",
+          link:"/broken",      
+        },
+        {
+          name:"error",
+          link:"/error",      
+        },
+        {
+          name:"log",
+          link:"/log",      
+        }
+        ]
     },
     {
       name:"about",
       link:"/about",      
     }
-    /*
-    ,
-    {
-      name:"language",
-      link:"",
-      submenu:[
-        {
-          name:"english",
-          link:"/?lang=en"
-        },
-        {
-          name:"russian",
-          link:"/?lang=ru"
-        }        
-      ]
-    }, 
-    */
   ];
 
   //статьи
@@ -283,7 +273,7 @@ function prepareData(currentLink){
   
   data.usernavigation=[{
     name:"mail",
-    link:"mail/?userrole=user"
+    link:"mail?userrole=user"
   },{name:"name1",
     link:"link2"
   }
@@ -356,13 +346,12 @@ app.route(['/','/:resource','/:resource/:command/:id'])
     let command=req.params["command"];
     let id=req.params["id"];
 
-    
     // произвольная ошибка для теста
     if (resource=='error') throw new Error('Example error text');     
     
     //добавляем данные для pug шаблонизатора
     let data=prepareData(req.originalUrl);
-    
+
     // сохраняем в сессию только поддерживаемые локали
     if (req.query["lang"]){
       if (i18n.getLocales().indexOf(req.query["lang"])>-1){
@@ -376,15 +365,20 @@ app.route(['/','/:resource','/:resource/:command/:id'])
     switch (userrole) {
       case 'admin':
         data.user.role=1;
-        data.message=newmessage('hi admin!','info');
+        data.messages.push(newmessage('hi admin!','info'));
         break;
       case 'user':
         data.user.role=2;
-        data.message=newmessage('hi user!','success');
+        data.messages.push(newmessage('hi user!','success'));
         break;
       default:
         delete data.user;
-    } 
+    }
+    
+    let search=req.query["search"];
+    if (search){
+      data.messages.push(newmessage('Can not find '+search,'info'));
+    }        
 
     // загружаем ресурс
     if (resource){
@@ -400,7 +394,7 @@ app.route(['/','/:resource','/:resource/:command/:id'])
       res.render(resource,data, function(err, html) {
         if(err) {
           //res.render('404',data);
-          data.message=newmessage(err.message,'warning');
+          data.messages.push(newmessage(err.message,'warning'));
           res.render('error', data);
           return;
         } else {
@@ -431,7 +425,7 @@ app.use(function(err,req,res,next)
       // render the error page
       res.status(err.status || 500);
       let data=prepareData(req.originalUrl);
-      data.message=newmessage(err.message,'danger');
+      data.messages.push(newmessage(err.message,'danger'));
       res.render('error',data);
       return;
     }

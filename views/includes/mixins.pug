@@ -134,7 +134,7 @@ mixin listlog(items)
 //- список писем и форма для отправки нового сообщения
 //- table-responsive для очень маленьких дисплеев - позволяет скроллировать слишком широкие строки
 mixin listmail(mail,users)
-  div.container
+  div
     div.panel.panel-default.filterable
       div.table-responsive
         table.table.mail.table.table-striped.table-hover
@@ -176,9 +176,11 @@ mixin listmail(mail,users)
           span.glyphicon.glyphicon-send
 
 //- вывод блока сообщения
-mixin message(type,text)
-  - cls="alert alert-"+type
-  div(class=cls)
+mixin messages(messages)
+  for message in messages
+    - cls="alert alert-"+message.type
+    div(class=cls)
+      a.close(href="#" data-dismiss="alert") ×
       case message.type
           when 'success'
               strong=t('info')
@@ -190,4 +192,4 @@ mixin message(type,text)
               strong=t('danger')
           default
               string=t('?')
-      pre= text
+      pre= message.text

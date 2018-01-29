@@ -63,5 +63,15 @@
 	"insert title": "insert title",
 	"insert description": "insert description",
 	"text": "text",
-	"insert text": "insert text"
+	"insert text": "insert text",
+	"please select article from menu": "please select article from menu",
+	"danger": "danger",
+	"about.title": "about.title",
+	"user": "user",
+	"message": "message",
+	"reply": "reply",
+	"delete": "delete",
+	"send message": "send message",
+	"insert message": "insert message",
+	"male": "male"
 }

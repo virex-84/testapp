@@ -1,6 +1,6 @@
 nav.navbar.navbar-default.navbar-fixed-top
     div.navbar-header
-        a.navbar-brand(href="/")= title
+        a.notranslate.navbar-brand(href="/")= title
         button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-main")
             span.icon-bar
             span.icon-bar
@@ -14,3 +14,8 @@ nav.navbar.navbar-default.navbar-fixed-top
                 else
                     li(class=(item.active ? 'active' : ''))
                         a(href=item["link"])= t(item["name"])
+        form.navbar-form.navbar-right.hidden-sm
+            form(id="search", method='get', action='/')
+                div.form-group
+                    input.form-control(type='text', name='search', placeholder=t('insert text for search'))
+                    button.btn.btn-default(type='submit')=t('search')

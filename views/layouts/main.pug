@@ -2,12 +2,16 @@
 include ../includes/mixins
 
 doctype html
-html
+//- указываем язык локали, что-бы гуглхром не предлагал перевести страницу (если выбрано "ru")
+html(lang=locale)
   head
     //- заголовок сайта в config.json application title  
     title= title
     meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
+    //- указываем гуглу не переводить страницу
+    //- meta(name="google" content="notranslate")
     link(href='/public/css/bootstrap.min.css', rel='stylesheet')
     link(href='/public/css/bootstrap-social.css', rel='stylesheet')
     link(href='/public/css/bootstrap-social-addon.css', rel='stylesheet')
@@ -17,10 +21,10 @@ html
     script(src='/public/js/main.js')  
   body
     div.container
-        div(id="mainmenu")
+        div.mainmenu
             include ../includes/mainnavbar
         div.jumbotron
-            div(id="title")
+            div.title
                 block title
             //- показываем рекламный блок только пользователям
             //- или всем незалогиненым
@@ -30,9 +34,9 @@ html
                     include ../includes/ads.pug
             else
                 include ../includes/ads.pug
-            div.wrapper(id="content")
+            div.content
                 block content
-            if message
-                +message(message.type,message.text)
+            if messages
+                +messages(messages)
         div.footer
             include footer.pug
