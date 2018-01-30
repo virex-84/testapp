@@ -222,7 +222,11 @@ function prepareData(currentLink){
         {
           name:"log",
           link:"/log",      
-        }
+        },
+        {
+          name:"RSS",
+          link:"/rss",      
+        }        
         ]
     },
     {
@@ -339,6 +343,26 @@ function prepareData(currentLink){
   return data;
 }
 
+// добавление данных для rss ленты 
+function prepareRSS(url,host,items){
+  let data={};
+  data.title="testapp feed";
+  data.link=url;
+  data.description="articles";
+  data.lastBuildDate=new Date();
+  data.Feeds=[];
+  for (var item of items){
+    data.Feeds.push({
+      title:item.title,
+      link:host+"/articles/read/"+item._id,
+      description:item.description,
+      author:item.author,
+      pubDate:new Date()
+    });
+  }
+  return data;
+}
+
 // пути route
 app.route(['/','/:resource','/:resource/:command/:id'])
   .get((req, res) => {
@@ -390,10 +414,17 @@ app.route(['/','/:resource','/:resource/:command/:id'])
         // если массив загружен - указываем команду для pug
         if (data.article) data.article.command=command;
       }
+      //для rss
+      if (resource=='rss') {
+        let host = req.protocol + '://' + req.get('host');
+        let url = req.protocol + '://' + req.get('host') + req.originalUrl;
+        data=prepareRSS(url,host,data.articles);
+      }
       // рендер html страницы из шаблона
       res.render(resource,data, function(err, html) {
         if(err) {
           //res.render('404',data);
+          data=prepareData(req.originalUrl);
           data.messages.push(newmessage(err.message,'warning'));
           res.render('error', data);
           return;
