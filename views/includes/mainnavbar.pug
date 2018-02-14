@@ -16,7 +16,7 @@ nav.navbar.navbar-default.navbar-fixed-top
                         a(href=item["link"])= t(item["name"])
             li
                 a(href="/rss")
-                    include rss-icon.svg.pug
+                    +svg-rss-icon(16,16)
         form.navbar-form.navbar-right.hidden-sm
             form(id="search", method='get', action='/')
                 div.form-group
