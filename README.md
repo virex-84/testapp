@@ -7,6 +7,10 @@ Sample express pug bootstrap
 * bootstrap-social (https://lipis.github.io/bootstrap-social/)
 * bootstrap js 3.3.7
 
+## Compile new themes
+* run: gulp theme-dark
+* run: gulp theme-green
+
 ## Developed on
 [Cloud9 IDE](https://c9.io)
 
