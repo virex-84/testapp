@@ -73,5 +73,11 @@
 	"delete": "delete",
 	"send message": "send message",
 	"insert message": "insert message",
-	"male": "male"
+	"male": "male",
+	"other": "other",
+	"RSS": "RSS",
+	"themes": "themes",
+	"default theme": "default theme",
+	"theme-dark.css": "theme-dark.css",
+	"search": "search"
 }

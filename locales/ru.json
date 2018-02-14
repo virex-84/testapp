@@ -83,5 +83,9 @@
 	"please select article from menu": "Пожалуйста, выберите интересующую вас статью",
 	"search": "Поиск",
 	"other": "Разное",
-	"RSS": "RSS"
+	"RSS": "RSS",
+	"themes": "Темы",
+	"default theme": "Обычная",
+	"theme-dark.css": "theme-dark.css",
+	"theme-green.css": "theme-green.css"
 }

@@ -18,8 +18,52 @@ path = require('path'),
 favicon = require('serve-favicon'),
 // локализация
 i18n = require("i18n"),
-util = require('util');
+util = require('util'),
 
+// для тем
+fs = require('fs'),
+filewatcher = require('filewatcher'),
+watcher = filewatcher();
+
+// переменная - путь к темам
+const themesPath=path.join(__dirname, 'public/css/themes');
+
+// объявляем глобальную переменную
+app.locals.cssthemes=[];
+
+// загрузка списка тем оформления
+function GetThemesList(){
+  app.locals.cssthemes.length=0;
+  app.locals.cssthemes.push({name:'default theme',link:"/?theme=default"});
+  fs.readdir(themesPath, (err, files) => {
+    files.forEach(file => {
+      app.locals.cssthemes.push({name:file,link:"/?theme="+file});
+    });
+  });
+}
+
+// загружаем список тем оформления
+GetThemesList();
+
+// слежение за изменениями в папке тем оформления
+watcher.add(themesPath);
+watcher.on('change', function(file, stat) {
+  console.log('%s Theme modified in %s',new Date().toISOString(), file);
+  GetThemesList();
+});
+
+/*
+// слежение за изменениями в папке тем оформления
+// не стабильно, дублирование события
+fs.watch(themesPath,(eventType, filename) => {
+  if (eventType == 'change'){
+    if (filename) {
+      console.log('%s Theme modified %s',new Date().toISOString(), filename);
+      GetThemesList();
+    }
+  }
+});
+*/
 
 // иконка
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
@@ -105,11 +149,18 @@ function newmessage(text,type){
 // выполняется при каждом запросе, кроме ошибки
 app.use(function (req, res, next) {
   
-    // установка локали
-    if (req.session)
+    if (req.session) {
+      // установка локали
       if (req.session.locale){
         i18n.setLocale(req, req.session.locale);
       }
+      
+      // установка css темы
+      if (req.session.theme){
+        res.locals.theme=req.session.theme;
+        if (req.session.theme=='default') delete req.session.theme;
+      }    
+    }//if (req.session)
    
     // логирование   
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -124,8 +175,11 @@ function checkActive(data,currentLink){
     let keys = Object.keys( data );
     for( let i = 0,length = keys.length; i < length; i++ ) {
         data[ keys[ i ] ];
-        if (data[ keys[ i ] ].link==currentLink)
+        if (data[ keys[ i ] ].link==currentLink) {
           data[ keys[ i ] ].active=true;
+        } else {
+          delete data[ keys[ i ] ].active;
+        }
         if (data[ keys[ i ] ].submenu!=undefined)
           checkActive(data[ keys[ i ] ].submenu,currentLink);
     }  
@@ -334,7 +388,15 @@ function prepareData(currentLink){
     }
     );
   }
-  data.mainnavigation.push(langmenu);  
+  data.mainnavigation.push(langmenu);
+  
+  // добавляем список тем
+  let themes={
+    name:'themes',
+    link:'',
+    submenu:app.locals.cssthemes
+  };
+  data.mainnavigation.push(themes);
   
   //помечаем(выделяем) текущий линк(ресурс) в главном меню
   if (currentLink)
@@ -384,6 +446,17 @@ app.route(['/','/:resource','/:resource/:command/:id'])
       }
     }
     
+    // установка темы
+    if (req.query["theme"]){
+      //сохраняем в сесию
+      req.session.theme=req.query["theme"];
+      res.locals.theme=req.query["theme"];
+      if (req.session.theme=='default') {
+        delete req.session.theme;
+        delete res.locals.theme;
+      }
+    }
+
     // в зависимости от роли - показываем сообщение-приветствие
     let userrole=req.query["userrole"];
     switch (userrole) {

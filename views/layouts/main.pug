@@ -13,7 +13,11 @@ html(lang=locale)
     meta(name="viewport" content="width=device-width, initial-scale=1")
     //- указываем гуглу не переводить страницу
     //- meta(name="google" content="notranslate")
-    link(href='/public/css/bootstrap.min.css', rel='stylesheet')
+    if theme
+       link(href='/public/css/themes/'+theme, rel='stylesheet')
+    else
+        link(href='/public/css/bootstrap.min.css', rel='stylesheet')
+    
     link(href='/public/css/bootstrap-social.css', rel='stylesheet')
     link(href='/public/css/bootstrap-social-addon.css', rel='stylesheet')
     link(href='/public/css/main.css', rel='stylesheet')

@@ -1,0 +1,42 @@
+@import 'bootstrap/variables'
+
+// scss
+// https://github.com/mtre/bootstrap-sass-directional/blob/master/assets/stylesheets/_bootstrap.scss
+
+// переменные
+// https://github.com/maxmx/bootstrap-stylus/blob/master/bootstrap/variables.styl
+
+// цвета
+// https://www.w3schools.com/colors/colors_picker.asp
+
+//=== Inverted navbar
+// Reset inverted navbar basics
+$navbar-default-color =                    lighten($gray-light, 15)
+$navbar-default-bg =                       #222
+$navbar-default-border =                   darken($navbar-inverse-bg, 10)
+
+// Inverted navbar links
+$navbar-default-link-color =               lighten($gray-light, 15)
+$navbar-default-link-hover-color =         #fff
+$navbar-default-link-hover-bg =            transparent
+$navbar-default-link-active-color =        $navbar-inverse-link-hover-color
+$navbar-default-link-active-bg =           darken($navbar-inverse-bg, 10)
+$navbar-default-link-disabled-color =      #444
+$navbar-default-link-disabled-bg =         transparent
+
+// Inverted navbar brand label
+$navbar-default-brand-color =              $navbar-inverse-link-color
+$navbar-default-brand-hover-color =        #fff
+$navbar-default-brand-hover-bg =           transparent
+
+// Inverted navbar toggle
+$navbar-default-toggle-hover-bg =          #333
+$navbar-default-toggle-icon-bar-bg =       #fff
+$navbar-default-toggle-border-color =      #333
+
+//** Background color for `<body>`.
+$body-bg =               #222
+//** Global text color on `<body>`.
+$text-color =            $gray-dark
+
+@import "bootstrap"
