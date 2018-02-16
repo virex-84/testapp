@@ -79,5 +79,7 @@
 	"themes": "themes",
 	"default theme": "default theme",
 	"theme-dark.css": "theme-dark.css",
-	"search": "search"
+	"search": "search",
+	"theme-green.css": "theme-green.css",
+	"profile": "profile"
 }

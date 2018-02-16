@@ -1,44 +1,75 @@
-h3= t('profile')
-form(id="signup", encType="multipart/form-data", method='post', action='/users/profile')
-	dd
-		if user.userpic
-			img.userpic(align="middle", src=user.userpic)
-		else
-			img.userpic(src="/images/default-userpic.png")
-		dt= t('userpic')
-		dd
-			input(type='file', name='userpic')
-		dt= t('firstname')
-		dd
-			input(type='text', name='firstname', value=profile.firstName, placeholder=t('insert firstname'))
-		dt= t('secondname')
-		dd
-			input(type='text', name='secondname', value=profile.secondName, placeholder=t('insert secondname'))
-		dt= t('threename')
-		dd
-			input(type='text', name='threename', value=profile.threeName, placeholder=t('insert threename'))
-		dt= t('borndate')
-		dd
-			- var userborn
-			- if (user.born) userborn=profile.born.toISOString().slice(0, 10);
-			input(type='date', name='born', value=userborn, required, placeholder=t('insert born'))
-		dt= t('gender')
-		dd
-			select(name='gender')
-				option(value='male' selected=(profile.sex==="male"))= t('male')
-				option(value='female' selected=(profile.sex==="female"))= t('female')				
-		dt= t('username')
-		dd
-			input(type='text', name='name', value=profile.username, placeholder=t('insert username'))
-		dt= t('password')
-		dd
-			input(type='password', name='password', placeholder=t('insert password'))
-		dt= t('e-mail')
-		dd
-			input(type='text', name='email', value=profile.email, placeholder=t('insert e-mail'))
-		dt= t('locale')			
-		dd
-			select(name='locale')
-				option(value='ru' selected=(profile.locale==="ru"))= t('russian')
-				option(value='en' selected=(profile.locale==="en"))= t('english')				
-		input(type='submit')
+div.panel.panel-default
+	div.panel-heading= t('profile')
+	form(id="signup", method='post', action='/users/profile')
+		div.panel-body
+				div.form-group
+					div.input-group
+						if user.userpic
+							img.userpic(align="middle", src=user.userpic)
+						else
+							img.userpic(src="/public/images/default-userpic.png")
+						label.control-label(for="selectUserPic")
+						input.filestyle(type="file" id="selectUserPic")
+				div.form-group
+					label= t('firstname')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-user
+						input.form-control(type='text', name='firstname', value=profile.firstName, placeholder=t('insert firstname'))
+				div.form-group
+					label= t('secondname')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-user
+						input.form-control(type='text', name='secondname', value=profile.secondName, placeholder=t('insert secondname'))
+				div.form-group
+					label= t('threename')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-user
+						input.form-control(type='text', name='threename', value=profile.threeName, placeholder=t('insert threename'))
+				div.form-group
+					label= t('borndate')
+					div.input-group
+						span.input-group-addon
+							//-i.glyphicon.icon-birthday-cake
+							+svg-bursday-icon(16,16)
+						- var userborn
+						- if (user.born) userborn=profile.born.toISOString().slice(0, 10);					
+						input.form-control(type='date', name='born', value=userborn, placeholder=t('insert born'))
+				div.form-group
+					label= t('gender')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-list
+						select.form-control(name='gender')
+							option(value='man' selected=(profile.gender==='man'))= t('man')
+							option(value='woman' selected=(profile.gender==='woman'))= t('woman')
+				div.form-group
+					label= t('username')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-user
+						input.form-control(type='text', name='name', value=profile.username, placeholder=t('insert username') required)
+				div.form-group
+					label= t('password')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-lock
+						input.form-control(type='password', name='password', value=profile.password, placeholder=t('insert password') required)
+				div.form-group
+					label= t('mail')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-envelope
+						input.form-control(type='email', name='email', value=profile.email, placeholder=t('insert e-mail') required)
+				div.form-group
+					label= t('language')
+					div.input-group
+						span.input-group-addon
+							i.glyphicon.glyphicon-globe
+						select.form-control(name='locale')
+							option(value='ru' selected=(profile.locale==="ru"))= t('ru')
+							option(value='en' selected=(profile.locale==="en"))= t('en')						
+		div.panel-footer
+			button.btn.btn-primary(type='submit')= t('submit')

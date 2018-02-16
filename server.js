@@ -113,6 +113,8 @@ i18n.configure({
     //для трансляции на язык указанный в хедерак куки от пользователя
       '__': 't',
     },
+    //перезагрузка локалей при изменении файла локализации
+    autoReload: true,    
     register: global
 });
 
@@ -317,8 +319,6 @@ function prepareData(currentLink){
   },
   ];
 
-
-
   //пользователь
   data.user={};
   data.user.username='user000';
@@ -328,14 +328,21 @@ function prepareData(currentLink){
   data.user.born=new Date();
   data.user.gender='male';
   data.user.role=0;
+  data.user.email='a@a.com';
+  data.user.password='secret';
   
   data.usernavigation=[{
     name:"mail",
     link:"mail?userrole=user"
-  },{name:"name1",
+  },{
+    name:"profile",
+    link:"/?userrole=user&profile=user"
+  },{    
+    name:"name1",
     link:"link2"
   }
-  ,{name:"name2",
+  ,{
+    name:"name2",
     link:"link2"
   }];
   
@@ -470,6 +477,10 @@ app.route(['/','/:resource','/:resource/:command/:id'])
         break;
       default:
         delete data.user;
+    }
+    
+    if (req.query["profile"]){
+      data.profile=data.user;
     }
     
     let search=req.query["search"];

@@ -87,5 +87,6 @@
 	"themes": "Темы",
 	"default theme": "Обычная",
 	"theme-dark.css": "theme-dark.css",
-	"theme-green.css": "theme-green.css"
+	"theme-green.css": "theme-green.css",
+	"profile": "Профиль";
 }
