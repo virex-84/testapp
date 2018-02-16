@@ -1,6 +1,17 @@
 # [testapp](https://github.com/virex-84/testapp)
 Sample express pug bootstrap
 
+## Features
+* Using server-side session (one coockie on client browser)
+* Server-side generate html pages by PUG (layouts, mixins, blocks, viriables, etc.)
+* Adaptive web desing by Bootstrap css (desktop, mobile, etc.)
+* Multi main menu
+* Customizing themes
+* Interface localization
+* SVG icon example
+* RSS page
+* JQuery example
+
 ## Dependencies
 * jquery 3.2.1
 * bootstrap css 3.1.1
