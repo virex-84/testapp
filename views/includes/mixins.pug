@@ -30,7 +30,7 @@ mixin listarticlesadminv1(items)
     ul.list-group(id="listarticleadmin")
       a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
         i.glyphicon.glyphicon-plus.text-success
-      each item in articles
+      each item in items
         li.list-group-item
           a.btn(href="/articles/read/"+item._id+"?userrole=admin")=item.title
           if user
@@ -38,6 +38,7 @@ mixin listarticlesadminv1(items)
               div.pull-right.action-buttons
                 a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin" title=t("edit"))
                 a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin" title=t("remove"))
+                
 //- список статей для админа (2 версия)
 mixin listarticlesadmintablev2(items)
   div.sidebar-nav
@@ -57,7 +58,7 @@ mixin listarticlesadmintablev2(items)
             tr
               a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
                 i.glyphicon.glyphicon-plus.text-success
-            each item in articles
+            each item in items
               tr
                 td.hidden-xs=item._id
                 td(id="findtext")
@@ -78,6 +79,7 @@ mixin listarticlesadmintablev2(items)
           li
             a(href="#") &laquo;
             a(href="#") &raquo;
+            
 //- список статей для админа (3 версия)
 mixin listarticlesadmintablev3(items)
   div.sidebar-nav
@@ -100,7 +102,7 @@ mixin listarticlesadmintablev3(items)
             tr
               a.list-group-item(href="/articles/new?userrole=admin" title=t("new article"))
                 i.glyphicon.glyphicon-plus.text-success
-            each item in articles
+            each item in items
               tr
                 td.hidden-xs=item._id
                 td
