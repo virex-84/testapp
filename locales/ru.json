@@ -1,6 +1,4 @@
 {
-	"name1": "name1",
-	"name2": "name2",
 	"gender": "Пол",
 	"male": "мужской",
 	"female": "женский",
@@ -85,8 +83,14 @@
 	"other": "Разное",
 	"RSS": "RSS",
 	"themes": "Темы",
+	"theme": "Тема",
 	"default theme": "Обычная",
 	"theme-dark.css": "theme-dark.css",
 	"theme-green.css": "theme-green.css",
-	"profile": "Профиль"
+	"profile": "Профиль",
+	"sessions": "Сессии",
+	"clear all": "Очистить всё",
+	"system": "Система",
+	"desktop": "desktop",
+	"mobile": "mobile"
 }

@@ -1,0 +1,9 @@
+//- sessions.pug
+extends layouts/main
+
+block title
+    h2= t('sessions')
+
+block content
+    if sessions
+        +listsessions(sessions)

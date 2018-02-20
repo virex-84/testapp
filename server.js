@@ -65,6 +65,21 @@ fs.watch(themesPath,(eventType, filename) => {
 });
 */
 
+// выводим все сессии
+// см. MemoryStore.prototype.all
+function GetAllSessions(sessionStore){
+  var sessionIds = Object.keys(sessionStore.sessions);
+  var result = [];
+
+  for (var i = 0; i < sessionIds.length; i++) {
+    let session = JSON.parse(sessionStore.sessions[sessionIds[i]]);
+    session.id=sessionIds[i];
+    result.push(session);
+  }
+  
+  return result;
+}
+
 // иконка
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 
@@ -98,7 +113,8 @@ app.use(session({
             path: "/",              // указывает путь cookie; используется для сравнения с путем запроса. Если путь и домен совпадают, выполняется отправка cookie в запросе.
             httpOnly: true,         // обеспечивает отправку cookie только с использованием протокола HTTP(S), а не клиентского JavaScript, что способствует защите от атак межсайтового скриптинга.
             maxAge  : 24 * 60 * 60 * 1000, // время жизни куки - 24 часа
-            secure: true           // обеспечивает отправку cookie браузером только с использованием протокола HTTPS
+            secure: false,          // (false для отладки в Cloud9 IDE) обеспечивает отправку cookie браузером только с использованием протокола HTTPS
+            proxy: true             // The "X-Forwarded-Proto" header will be used.
             },
     saveUninitialized: true, //сохранять пустые сессии
     resave: false,           //пересохранять если нет изменений  
@@ -161,7 +177,21 @@ app.use(function (req, res, next) {
       if (req.session.theme){
         res.locals.theme=req.session.theme;
         if (req.session.theme=='default') delete req.session.theme;
-      }    
+      }
+      
+      //проверка на мобильного клиента
+      let ua = req.header('user-agent');
+      if (/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile|ipad|android|android 3.0|xoom|sch-i800|playbook|tablet|kindle/i.test(ua)) {
+        req.session.mobile=1;
+      } else {}
+      
+      // fix
+      // игнорируем apple-touch-icon.png, apple-touch-icon-precomposed.png и т.д. (apple-touch-icon*png)
+      // что-бы не плодились лишние сессии от android или apple устройства которые запрашивают эти файлы для превью
+      // regexp выражение можно проверить на https://regex101.com/
+      // на продакшн лучше выдавать эти файлы силами прокси например nginx
+      if (/apple-touch-icon.*[png]/i.test(req.url)) delete req.session;
+      
     }//if (req.session)
    
     // логирование   
@@ -282,7 +312,11 @@ function prepareData(currentLink){
         {
           name:"RSS",
           link:"/rss",      
-        }        
+        },
+        {    
+          name:"sessions",
+          link:"/sessions"
+        }
         ]
     },
     {
@@ -337,13 +371,6 @@ function prepareData(currentLink){
   },{
     name:"profile",
     link:"/?userrole=user&profile=user"
-  },{    
-    name:"name1",
-    link:"link2"
-  }
-  ,{
-    name:"name2",
-    link:"link2"
   }];
   
   
@@ -479,14 +506,32 @@ app.route(['/','/:resource','/:resource/:command/:id'])
         delete data.user;
     }
     
+    // запрос на изменение профиля
     if (req.query["profile"]){
       data.profile=data.user;
     }
     
+    // поиск на сайте
     let search=req.query["search"];
     if (search){
       data.messages.push(newmessage('Can not find '+search,'info'));
-    }        
+    }     
+    
+    // страница "сессии"
+    if (resource=='sessions'){
+      if (command=='delete') {
+        if (id=='all') {
+          req.sessionStore.clear();
+        } else 
+          req.sessionStore.destroy(id);
+        
+        // возвращаемся обратно
+        res.redirect('back');
+        
+        // выходим, во избежании "Error: Can't set headers after they are sent.
+        return ;
+      }
+    }
 
     // загружаем ресурс
     if (resource){
@@ -503,6 +548,9 @@ app.route(['/','/:resource','/:resource/:command/:id'])
         let host = req.protocol + '://' + req.get('host');
         let url = req.protocol + '://' + req.get('host') + req.originalUrl;
         data=prepareRSS(url,host,data.articles);
+      }
+      if (resource=='sessions') {
+        data.sessions=GetAllSessions(req.sessionStore);
       }
       // рендер html страницы из шаблона
       res.render(resource,data, function(err, html) {

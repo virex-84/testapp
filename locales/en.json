@@ -81,5 +81,11 @@
 	"theme-dark.css": "theme-dark.css",
 	"search": "search",
 	"theme-green.css": "theme-green.css",
-	"profile": "profile"
+	"profile": "profile",
+	"sessions": "sessions",
+	"theme": "theme",
+	"system": "system",
+	"clear all": "clear all",
+	"desktop": "desktop",
+	"mobile": "mobile"
 }

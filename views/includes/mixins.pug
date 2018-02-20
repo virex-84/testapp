@@ -124,6 +124,31 @@ mixin listarticlesadmintablev3(items)
             a(href="#") &laquo;
             a(href="#") &raquo;
 
+//- список сессий
+mixin listsessions(items)
+  div.sidebar-nav
+    div.panel.panel-default.filterable
+      div.panel-body.table-responsive
+        table.table.table-striped.table-hover
+          thead
+            tr.filters
+              th ID
+              th=t("theme")
+              th=t("language")
+              th=t("system")
+              th
+          tbody(id="listsessions")
+            a.list-group-item(href="/sessions/delete/all" title=t("clear all"))
+              i.glyphicon.glyphicon-trash.text-danger
+            each item in items
+              tr
+                td=item.id
+                td=item.theme
+                td=item.locale
+                td=typeof item.mobile !== "undefined" ? t("mobile") : t("desktop")
+                td
+                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/sessions/delete/"+item.id+"?userrole=admin", title=t("remove"))
+
 //- лог
 mixin listlog(items)
   dev.sidebar-nav
