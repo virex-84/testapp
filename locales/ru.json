@@ -92,5 +92,13 @@
 	"clear all": "Очистить всё",
 	"system": "Система",
 	"desktop": "desktop",
-	"mobile": "mobile"
+	"mobile": "mobile",
+	"add": "Добавить",
+	"menu": "Меню",
+	"source": "Содержимое",
+	"get": "Получить",
+	"set": "Применить",
+	"load": "Загрузить",
+	"save": "Сохранить",
+	"jquery + table": "jquery + table"
 }

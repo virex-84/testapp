@@ -316,7 +316,11 @@ function prepareData(currentLink){
         {    
           name:"sessions",
           link:"/sessions"
-        }
+        },
+        {    
+          name:"jquery + table",
+          link:"/test"
+        }        
         ]
     },
     {

@@ -1,0 +1,59 @@
+//- test.pug
+extends layouts/main
+
+block title
+    h2 JQuery table
+
+block content
+    row
+        p.
+            Пример редактируемой таблицы на JQuery с возможностью загрузить/сохранить данные в форматах JSON и CSV
+        div.panel.panel-default.filterable
+            table.table.table-striped.table-hover
+              thead
+                tr.filters
+                  th
+                  th
+                    input.form-control(type="text" placeholder="Наименование", aria-label="фильтр по наименованию")
+                  th
+                    input.form-control(type="text" placeholder="Значение", aria-label="фильтр по значению")
+                  th
+              tbody(id="items")
+                - var items=[{name:"name1",value:"value1"},{name:"name2",value:"value2"}]
+                each item in items
+                  tr
+                    td.namerow=item.name
+                    td.valuerow=item.value
+                    td
+                      a.btn.glyphicon.glyphicon-pencil.editrow(href="#", title=t("edit"))
+                    td
+                      a.btn.glyphicon.glyphicon-trash.text-danger.deleterow(href="#", title=t("remove"))
+                tr
+                    td
+                        input.form-control(type="text" placeholder="Наименование")
+                    td
+                        input.form-control(type="text" placeholder="Значение")    
+                    td
+                    td
+                      a.btn.glyphicon.glyphicon-plus.addrow(href="#", title=t("add"))                        
+
+        div.well
+            legend=t('source')
+                div.form-group
+                    div.input-group
+                        span.input-group-addon
+                            i.glyphicon.glyphicon-pencil          
+                        textarea.form-control.textrow(id="source", rows="4", aria-label=t('insert message'), placeholder=t('insert message'))
+            div.form-group
+                label JSON
+                    input(type="radio", name="format", value="JSON", checked="")
+                label CSV
+                    input(type="radio", name="format", value="CSV")
+            div.form-group
+                button.btn.btn-warning(id="getitems")=t('get')
+                button.btn.btn-warning(id="setitems")=t('set')
+                label.btn.btn-warning(for="load")=t('load')
+                    input.filestyle(type="file" id="load", style="display:none;")
+                button.btn.btn-warning(id="save")=t('save')
+                
+        div.row(id="message")
