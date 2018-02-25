@@ -1,7 +1,7 @@
 nav.navbar.navbar-default.navbar-fixed-top
     div.navbar-header
         a.notranslate.navbar-brand(href="/")= title
-        button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-main")
+        button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-main" aria-label=t("menu"))
             span.icon-bar
             span.icon-bar
             span.icon-bar
@@ -16,7 +16,7 @@ nav.navbar.navbar-default.navbar-fixed-top
                         a(href=item["link"])= t(item["name"])
             li
                 a(href="/rss")
-                    +svg-rss-icon(16,16)
+                    +svg-rss-icon(16,16,'RSS - Rich Site Summary')
         form.navbar-form.navbar-right.hidden-sm
             form(id="search", method='get', action='/')
                 div.form-group

@@ -197,7 +197,7 @@ mixin listmail(mail,users)
         div.input-group
           span.input-group-addon
             i.glyphicon.glyphicon-pencil          
-          textarea.form-control(rows="4",name='message', placeholder=t('insert message') required)
+          textarea.form-control(rows="4",name='message', aria-label=t('insert message'), placeholder=t('insert message') required)
       div.form-group
         button.btn.btn-warning(type='submit')= t('submit')
           span.glyphicon.glyphicon-send

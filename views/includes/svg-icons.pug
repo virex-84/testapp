@@ -1,6 +1,6 @@
 //- svg-icons.pug
-mixin svg-rss-icon(width,height)
-    svg(xmlns="http://www.w3.org/2000/svg" version="1.1" width=width+"px" height=height+"px" viewBox="0 0 256 256")
+mixin svg-rss-icon(width,height,descr)
+    svg(xmlns="http://www.w3.org/2000/svg" version="1.1" width=width+"px" height=height+"px" viewBox="0 0 256 256" aria-label=descr)
         defs
             linearGradient(x1="0.085" y1="0.085" x2="0.915" y2="0.915" id="RSSgrad")
             stop(offset="0.0" stop-color="#E3702D")
