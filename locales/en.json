@@ -87,5 +87,13 @@
 	"system": "system",
 	"clear all": "clear all",
 	"desktop": "desktop",
-	"mobile": "mobile"
+	"mobile": "mobile",
+	"menu": "menu",
+	"jquery + table": "jquery + table",
+	"add": "add",
+	"source": "source",
+	"get": "get",
+	"set": "set",
+	"load": "load",
+	"save": "save"
 }

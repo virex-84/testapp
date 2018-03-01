@@ -25,6 +25,22 @@ fs = require('fs'),
 filewatcher = require('filewatcher'),
 watcher = filewatcher();
 
+const
+// сборщик
+webpack = require("webpack"),
+// конфигурация
+config=require('./webpack.config.js'),
+// компилятор
+compiler = webpack(config);
+// слежение за изменением файла
+compiler.watch({
+  aggregateTimeout: 300,
+  poll: undefined
+}, (err, stats) => {
+  //console.log(stats);
+  console.log('react rebuild');
+});
+
 // переменная - путь к темам
 const themesPath=path.join(__dirname, 'public/css/themes');
 
@@ -51,19 +67,6 @@ watcher.on('change', function(file, stat) {
   console.log('%s Theme modified in %s',new Date().toISOString(), file);
   GetThemesList();
 });
-
-/*
-// слежение за изменениями в папке тем оформления
-// не стабильно, дублирование события
-fs.watch(themesPath,(eventType, filename) => {
-  if (eventType == 'change'){
-    if (filename) {
-      console.log('%s Theme modified %s',new Date().toISOString(), filename);
-      GetThemesList();
-    }
-  }
-});
-*/
 
 // выводим все сессии
 // см. MemoryStore.prototype.all
@@ -113,7 +116,7 @@ app.use(session({
             path: "/",              // указывает путь cookie; используется для сравнения с путем запроса. Если путь и домен совпадают, выполняется отправка cookie в запросе.
             httpOnly: true,         // обеспечивает отправку cookie только с использованием протокола HTTP(S), а не клиентского JavaScript, что способствует защите от атак межсайтового скриптинга.
             maxAge  : 24 * 60 * 60 * 1000, // время жизни куки - 24 часа
-            secure: false,          // (false для отладки в Cloud9 IDE) обеспечивает отправку cookie браузером только с использованием протокола HTTPS
+            secure: false,          // (false для отладки в Cloud 9 I) обеспечивает отправку cookie браузером только с использованием протокола HTTPS
             proxy: true             // The "X-Forwarded-Proto" header will be used.
             },
     saveUninitialized: true, //сохранять пустые сессии
@@ -320,7 +323,11 @@ function prepareData(currentLink){
         {    
           name:"jquery + table",
           link:"/test"
-        }        
+        },
+        {    
+          name:"React.js",
+          link:"/react"
+        }    
         ]
     },
     {

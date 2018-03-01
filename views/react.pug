@@ -1,0 +1,13 @@
+//- react.pug
+extends layouts/main
+
+block title
+    h2 React example
+    small Debug with 
+        b
+            a(href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi") React Developer Tools
+
+block content
+    noscript=t('You need to enable JavaScript to run this app')
+    div(id="root")
+    script(src="/public/js/reactapp.js")

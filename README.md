@@ -11,6 +11,7 @@ Sample express pug bootstrap
 * SVG icon example
 * RSS page
 * JQuery example
+* [React application (REACT.md)](REACT.md)
 
 ## Dependencies
 * jquery 3.2.1
