@@ -97,10 +97,8 @@ app.disable('x-powered-by');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');//pug бывший jade
 
-
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1); // для сохранения куки сессии в клиентском браузере
-  session.cookie.secure = true; // serve secure cookies
 }
 if (app.get('env') === 'development') {
   app.set('trust proxy', 1); // для сохранения куки сессии в клиентском браузере

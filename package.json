@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "NODE_ENV=production node server.js"
   },
   "author": "virex",
   "license": "MIT",
@@ -17,6 +18,7 @@
     "filewatcher": "^3.0.1",
     "gulp-stylus": "^2.7.0",
     "i18n": "^0.8.3",
+    "jquery": "^3.3.1",
     "path": "^0.12.7",
     "preact": "^8.2.7",
     "preact-compat": "^3.18.0",
@@ -32,6 +34,6 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "webpack": "^2.1.0-beta.22"
+    "webpack": "^2.7.0"
   }
 }

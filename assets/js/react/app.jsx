@@ -3,9 +3,9 @@ import 'raf/polyfill';
 
 import React from "react";
 import { render } from "react-dom";
-import Navigator from "./Navigator";
-import Footer from "./Footer";
-import Page from "./Page";
+import Navigator from "./Navigator.jsx";
+import Footer from "./Footer.jsx";
+import Page from "./Page.jsx";
 
 const styles = {
   fontFamily: "sans-serif"
@@ -87,4 +87,19 @@ class App extends React.Component {
   }
 }
 
-render(<App data={Pages} />, document.getElementById("root"));
+// запуск React приложения если найден root элемент
+function run() {
+  if (document.getElementById("root"))
+    render(<App data={Pages} />, document.getElementById("root"));
+}
+
+const loadedStates = ['complete', 'loaded', 'interactive'];
+
+// ожидаем полной загрузки страницы
+if (loadedStates.includes(document.readyState) && document.body) {
+  run();
+} else {
+  window.addEventListener('DOMContentLoaded', run, false);
+}
+
+

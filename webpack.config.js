@@ -1,25 +1,50 @@
 var webpack = require("webpack");
 
-module.exports = {
-  entry: './react/app.js',
+const isDevelopment = !process.env.NODE_ENV;
+const isProduction = process.env.NODE_ENV;
+
+const config = {
+  entry: {
+    'js/main.js':'./assets/js/main.js'
+  },
   output: {
-    path: __dirname + '/public/js/',
-    filename: 'reactapp.js'
+    path: __dirname + '/public/',
+    filename: "[name]"
   },
   module: {
     loaders: [
       {
-        test: /.jsx?$/,
+        test: /.jsx$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
           presets: ["env", "react"]
         }
-      }
+      },      
+      {
+        test: /.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        include: '/assets/js/bootstrap.min.js',
+        query: {
+          presets: ["env"]
+        }
+      },
     ]
   }
-  /* //раскомментируйте для максимального сжатия
   ,plugins: [
+    // expose $ and jQuery to global scope.
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
+  ]
+};
+
+if (isProduction) {
+  
+  // максимальное сжатие
+  config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
      minimize: true,
      mangle: true,
@@ -30,12 +55,15 @@ module.exports = {
        drop_console: true,
      }
     })
-  ],
-  resolve: {
+  );
+  
+  // отладка React Developer Tools будет невозможной)
+  config.resolve={
     alias: {
      'react': 'preact-compat',
-     'react-dom': 'preact-compat'
-    },    
-  }
-  */
-};
+     'react-dom': 'preact-compat',
+    }
+  };
+}
+
+module.exports = config;
