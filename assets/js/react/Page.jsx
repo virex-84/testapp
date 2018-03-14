@@ -6,7 +6,11 @@ class Page extends React.Component {
     return (
       <div className="panel-body">
         <h2>{page.title}</h2>
-        <p>{page.text}</p>
+        <small>{page.description}</small>        
+        <div className="blockquote">
+        {page.text}
+        <footer>{page.author}</footer>
+        </div>
       </div>
     );
   }

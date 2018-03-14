@@ -23,7 +23,10 @@ util = require('util'),
 // для тем
 fs = require('fs'),
 filewatcher = require('filewatcher'),
-watcher = filewatcher();
+watcher = filewatcher(),
+
+store = require("./store.js"),
+apiVersion1 = require("./api1.js");
 
 const
 // сборщик
@@ -88,6 +91,9 @@ app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 
 // статические файлы (скрипты, стили и т.д.)
 app.use('/public', express.static(path.join(__dirname, '/public')));
+
+// апи версия 1
+app.use("/api/v1", apiVersion1);
 
 // для безопасности
 app.disable('x-powered-by');
@@ -203,251 +209,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-// помечаем меню выделением
-function checkActive(data,currentLink){
-    let keys = Object.keys( data );
-    for( let i = 0,length = keys.length; i < length; i++ ) {
-        data[ keys[ i ] ];
-        if (data[ keys[ i ] ].link==currentLink) {
-          data[ keys[ i ] ].active=true;
-        } else {
-          delete data[ keys[ i ] ].active;
-        }
-        if (data[ keys[ i ] ].submenu!=undefined)
-          checkActive(data[ keys[ i ] ].submenu,currentLink);
-    }  
-}
-
-// добавление данных для вывода 
-function prepareData(currentLink){
-  let data={};
-  data.log=publicLog.getLines();
-  data.title='Sample pug & bootstrap';
-  data.messages=[];
-  
-  //главное меню, навигация
-  data.mainnavigation=
-  [
-    {
-    name:"home",
-    link:"",
-    submenu:[
-      {
-        name:"home (admin)",
-        link:"/?userrole=admin"
-      },
-      {
-        name:"home (user)",
-        link:"/?userrole=user"
-      },
-      {
-        name:"mail",
-        link:"/mail?userrole=user"
-      },
-      {
-        name:"articles",
-        link:"",
-        submenu:[
-        {
-          name:"articles (admin)",
-          link:"/articles?userrole=admin"
-        },
-        {
-          name:"articles (user)",
-          link:"/articles?userrole=user"
-        },
-        ]
-      },      
-      ]
-    },
-    {
-    name:"tree",
-    link:"",
-    submenu:[
-      {
-        name:"treeA",
-        link:"/treeA",
-      },
-      {
-        name:"treeB",
-        link:"",
-        submenu:[
-          {
-            name:"treeC",
-            link:"/treeC",
-          },
-          {
-            name:"treeD",
-            link:"/treeD",
-          },            
-          {
-          name:"treeE",
-          link:"/treeE",
-          submenu:[
-            {
-            name:"treeF",
-            link:"/treeF"
-            }
-            ]
-          }
-      ]
-      }
-      ]
-    },
-    {
-      name:"other",
-      link:"",
-      submenu:[
-        {
-          name:"broken",
-          link:"/broken",      
-        },
-        {
-          name:"error",
-          link:"/error",      
-        },
-        {
-          name:"log",
-          link:"/log",      
-        },
-        {
-          name:"RSS",
-          link:"/rss",      
-        },
-        {    
-          name:"sessions",
-          link:"/sessions"
-        },
-        {    
-          name:"jquery + table",
-          link:"/test"
-        },
-        {    
-          name:"React.js",
-          link:"/react"
-        }    
-        ]
-    },
-    {
-      name:"about",
-      link:"/about",      
-    }
-  ];
-
-  //статьи
-  data.articles=[{
-    _id:"1",
-    title:"Title A",
-    text:"text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1",
-    description:"some info about A",
-    author:"author1"
-  },{
-    _id:"2",
-    title:"Title B",
-    text:"text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2",
-    description:"description from B",
-    author:"ivan"
-  },{
-    _id:"3",
-    title:"Some title C",
-    text:"text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3",
-    description:"bla-bla-bla",
-    author:"alex"
-  },{
-    _id:"4",
-    title:"About this site",
-    text:"text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4",
-    description:"about text",
-    author:"admin"
-  },
-  ];
-
-  //пользователь
-  data.user={};
-  data.user.username='user000';
-  data.user.secondName='Иванов';
-  data.user.firstName='Иван';
-  data.user.threeName='Иванович';
-  data.user.born=new Date();
-  data.user.gender='male';
-  data.user.role=0;
-  data.user.email='a@a.com';
-  data.user.password='secret';
-  
-  data.usernavigation=[{
-    name:"mail",
-    link:"mail?userrole=user"
-  },{
-    name:"profile",
-    link:"/?userrole=user&profile=user"
-  }];
-  
-  
-  //эл.почта
-  //список пользователей для отправки почты
-  let mailusers=[];
-  mailusers.push({
-    _id:1,
-    username:"user001"
-  });
-  mailusers.push({
-    _id:2,
-    username:"user002"
-  });
-  //письма-сообщения
-  let mails=[];
-  mails.push({
-    _id:1,
-    from:{username:"user001"},
-    message:"hello!"
-  });
-  mails.push({
-    _id:2,
-    from:{username:"user002"},
-    message:"message from user002!"
-  });
-  mails.push({
-    _id:3,
-    from:{username:"user002"},
-    message:"how do you do?!"
-  });   
-  
-  data.user.mails=mails;
-  data.user.mailusers=mailusers;
-  //количество сообщений
-  data.user.mailcount=mails.length;
-  
-  
-  //добавляем все доступные локали в главное меню
-  let langmenu={
-    name:'language',
-    link:'',
-    submenu:[]
-  };  
-  for (let item of i18n.getLocales()){
-    langmenu.submenu.push({
-    name:item,
-    link:'/?lang='+item,
-    }
-    );
-  }
-  data.mainnavigation.push(langmenu);
-  
-  // добавляем список тем
-  let themes={
-    name:'themes',
-    link:'',
-    submenu:app.locals.cssthemes
-  };
-  data.mainnavigation.push(themes);
-  
-  //помечаем(выделяем) текущий линк(ресурс) в главном меню
-  if (currentLink)
-    checkActive(data.mainnavigation,currentLink);
-
-  return data;
-}
-
 // добавление данных для rss ленты 
 function prepareRSS(url,host,items){
   let data={};
@@ -479,7 +240,7 @@ app.route(['/','/:resource','/:resource/:command/:id'])
     if (resource=='error') throw new Error('Example error text');     
     
     //добавляем данные для pug шаблонизатора
-    let data=prepareData(req.originalUrl);
+    let data=store.prepareData(req.originalUrl,publicLog, i18n.getLocales(),app.locals.cssthemes);
 
     // сохраняем в сессию только поддерживаемые локали
     if (req.query["lang"]){
@@ -565,7 +326,7 @@ app.route(['/','/:resource','/:resource/:command/:id'])
       res.render(resource,data, function(err, html) {
         if(err) {
           //res.render('404',data);
-          data=prepareData(req.originalUrl);
+          let data=store.prepareData(req.originalUrl,publicLog, i18n.getLocales(),app.locals.cssthemes);
           data.messages.push(newmessage(err.message,'warning'));
           res.render('error', data);
           return;
@@ -583,7 +344,7 @@ app.route(['/','/:resource','/:resource/:command/:id'])
 // главный route, содержит перенаправление на 404 при остальных запросах
 // (не добавленных ранее маршрутов)
 app.all('*', function (req, res, next) {
-    let data=prepareData();
+    let data=store.prepareData(req.originalUrl,publicLog, i18n.getLocales(),app.locals.cssthemes);
     res.render('404',data);
 });
 
@@ -596,7 +357,7 @@ app.use(function(err,req,res,next)
     } else {
       // render the error page
       res.status(err.status || 500);
-      let data=prepareData(req.originalUrl);
+      let data=store.prepareData(req.originalUrl,publicLog, i18n.getLocales(),app.locals.cssthemes);
       data.messages.push(newmessage(err.message,'danger'));
       res.render('error',data);
       return;
