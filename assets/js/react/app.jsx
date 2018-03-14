@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import 'raf/polyfill';
+import 'whatwg-fetch'; //fetch polyfill
 
 import React from "react";
 import { render } from "react-dom";
