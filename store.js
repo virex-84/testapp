@@ -172,7 +172,7 @@ function checkActive(data,currentLink){
 function prepareData(currentLink,log,locales,cssthemes){
   let data={};
   //data.log=publicLog.getLines();
-  data.log=log;
+  data.log=log.items.slice(0);
   data.title='Sample pug & bootstrap';
   data.messages=[];
   
