@@ -19,13 +19,19 @@ npm install apollo-client apollo-cache-inmemory apollo-link-http react-apollo gr
 На клиентской части все запросы через [apollo-client](https://www.apollographql.com/docs/react/)
 
 ## Особенности
-Обычно для CRUD (create, read, update, delete) модели взаимодействия с сервером приходится создавать множество "endpoint" - точек входа для операций, например:
-* site.com/articles
-* site.com/news
-* site.com/notes
+Обычно для CRUD (create, read, update, delete) модели взаимодействия с сервером через JSON приходится создавать множество "endpoint" - точек входа для операций, например:
+* site.com/v1/articles/
+* site.com/v1/news/
+* site.com/v1/notes/
 и т.д.
 
-GraphQL позволяет взаимодействовать с сервером через **единую точку входа**, с помощью различных запросов.
+Для каждого запроса необходимо проектировать свой API, а со временем API может сильно поменяться, поэтому появляются новые версии API, для которых создаются новые точки входа:
+* site.com/v2/articles/
+* site.com/v3/news/
+* site.com/v15/notes/
+и т.д.
+
+GraphQL позволяет взаимодействовать с сервером через **единую точку входа**, с помощью различных запросов, соответствующих определенным схемам
 
 Пример:
 ```
