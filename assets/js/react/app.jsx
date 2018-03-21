@@ -4,8 +4,8 @@ import 'raf/polyfill';
 import React from "react";
 import { render } from "react-dom";
 
-import {JSONQuery} from "./ajax.js"; 
-import {gqlQuery, gqlResetStore, GET_ALL_ARTICLES, GET_ARTICLE} from "./graphql.js";
+import {JSONQuery} from "./ajax.jsx"; 
+import {gqlQuery, gqlResetStore, GET_ALL_ARTICLES, GET_ARTICLE} from "./graphql.jsx";
 
 import Navigator from "./Navigator.jsx";
 import Footer from "./Footer.jsx";

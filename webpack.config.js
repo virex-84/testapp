@@ -29,7 +29,7 @@ const config = {
         query: {
           presets: ["env"]
         }
-      },
+      }
     ]
   }
   ,plugins: [
