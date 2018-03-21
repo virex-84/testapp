@@ -15,6 +15,7 @@ npm install apollo-client apollo-cache-inmemory apollo-link-http react-apollo gr
 
 ## Описание
 На серверной части создается graphql "endpoint" - единая точка входа для всех GraphQL запросов
+
 На клиентской части все запросы через [apollo-client](https://www.apollographql.com/docs/react/)
 
 ## Особенности
@@ -24,7 +25,7 @@ npm install apollo-client apollo-cache-inmemory apollo-link-http react-apollo gr
 * site.com/notes
 и т.д.
 
-GraphQL позволяет взаимодействовать с сервером через единую точку входа, с помощью различных запросов.
+GraphQL позволяет взаимодействовать с сервером через **единую точку входа**, с помощью различных запросов.
 
 Пример:
 ```

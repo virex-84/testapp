@@ -12,7 +12,7 @@ Sample express pug bootstrap
 * RSS page
 * JQuery example
 * [React application (REACT.md)](REACT.md)
-* [GraphQL](GRAPHQL.md) server-side (nodejs) and client-side (Reactjs)
+* [GraphQL (GRAPHQL.md)](GRAPHQL.md) server-side (nodejs) and client-side (Reactjs)
 
 ## Dependencies
 * jquery 3.2.1
