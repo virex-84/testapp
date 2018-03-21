@@ -1,17 +1,17 @@
 import 'babel-polyfill';
 import 'raf/polyfill';
-import 'whatwg-fetch'; //fetch polyfill
 
 import React from "react";
 import { render } from "react-dom";
+
+import {JSONQuery} from "./ajax.js"; 
+import {gqlQuery, gqlResetStore, GET_ALL_ARTICLES, GET_ARTICLE} from "./graphql.js";
+
 import Navigator from "./Navigator.jsx";
 import Footer from "./Footer.jsx";
 import Page from "./Page.jsx";
 import Message from "./Message.jsx";
 import Reload from "./Reload.jsx";
-
-// верси API сервера
-const API = "/api/v1/";
 
 const styles = {
   fontFamily: "sans-serif"
@@ -25,61 +25,6 @@ let Pages = [
     text: "Обновите список статей"
   }
 ];
-
-// промис с таймером
-function timeoutPromise(ms, promise) {
-  return new Promise((resolve, reject) => {
-    // запускаем таймер
-    const timeoutId = setTimeout(() => {
-      clearTimeout(timeoutId);
-      reject(new Error("Время запроса истекло ("+ms+" мс)"));
-    }, ms);
-    promise.then(
-      (res) => {
-        clearTimeout(timeoutId);
-      },
-      (err) => {
-        
-        clearTimeout(timeoutId);
-        reject(err);
-      }
-    );
-  });
-}
-
-// получение данных через API сайта
-// (функцию можно вынести в отдельный модуль)
-function GetData(self,timeout,resource,callback){
-  // признак окончания работы таймера
-  let didTimeOut = false;
-  
-  // промис
-  let timedFetch=window.fetch(API+resource, {headers: {'Cache-Control': 'no-cache'}},)
-    .then(function(response) {
-      // если таймер уже истек, а сервер присылает результат - игнорируем
-      if(didTimeOut) return;
-      if (response.status !=200) return Promise.reject(new Error(response.statusText));
-      return response.json();
-    }) 
-    .then(
-      (result) => {
-        if(didTimeOut) return;
-        callback(self,null,result);
-      },
-      (error) => {
-        callback(self,error,null);
-      }
-    );
-      
-  // запускаем промис
-  timeoutPromise(timeout, timedFetch).then(function(response) {
-    callback(self,null,response);
-  }).catch(function(error) {
-    // при ошибке - считаем что таймер истек
-    didTimeOut = true;
-    callback(self,error,null);
-  });
-}      
 
 class App extends React.Component {
   constructor(props) {
@@ -97,38 +42,13 @@ class App extends React.Component {
     };
     this.backPage = this.backPage.bind(this);
     this.nextPage = this.nextPage.bind(this);
-    this.reloadPages = this.reloadPages.bind(this);
-  }
-  
-  onReloadPages(){
-    this.setState({ isLoading: true });
-    // загружаем статьи, таймер - на 5 сек
-    GetData(this,5000,'articles',function(self,error,data){
-      if (data) {
-        self.setState({
-          isLoading: false,
-          error: null,
-          
-          pages:data,
-          pageCount: data.length,
-          pageID: 0,          
-          page: data[0],
-          aloowBack: false,
-          aloowNext: true
-        });
-      }
-      if (error) {
-        self.setState({
-          isLoading: false,
-          error:error
-        })
-      }
-    });
+    this.reloadPagesJSON = this.reloadPagesJSON.bind(this);
+    this.reloadPagesGQL = this.reloadPagesGQL.bind(this);
   }
   
   componentWillMount() {
     // автоматическая загрузка при создании компонента
-    //this.onReloadPages();
+    //this.reloadPagesJSON();
   }  
   
   backPage() {
@@ -162,11 +82,66 @@ class App extends React.Component {
     });
   }
   
-  reloadPages(e){
+  reloadPagesJSON(e){
     e.preventDefault();
-    this.onReloadPages();
+    this.setState({ isLoading: true });
+    // загружаем статьи, таймер - на 5 сек
+    JSONQuery(this,5000,'articles',function(self,error,data){
+      if (data) {
+        self.setState({
+          isLoading: false,
+          error: null,
+          
+          pages:data,
+          pageCount: data.length,
+          pageID: 0,          
+          page: data[0],
+          aloowBack: false,
+          aloowNext: true
+        });
+      }
+      if (error) {
+        self.setState({
+          isLoading: false,
+          error:error
+        });
+      }
+    });
   }
   
+  reloadPagesGQL(e){
+    e.preventDefault();
+    this.setState({ isLoading: true });
+    
+    // запрос
+    gqlQuery(this,GET_ALL_ARTICLES,null,function(self, res, error){
+    //qlQuery(this,GET_ARTICLE,{id:0},function(self, res, error){
+      if (res){
+        let data=res.data.articles.items;
+        self.setState({
+          isLoading: false,
+          error: null,
+        
+          pages:data,
+          pageCount: data.length,
+          pageID: 0,          
+          page: data[0],
+          aloowBack: false,
+          aloowNext: true
+        });
+        gqlResetStore(); //сбрасываем кэш (заставляем клиент сделать последующий запрос к серверу заново)
+      }
+      
+      if (error) {
+        self.setState({
+          isLoading: false,
+          error:error
+        });
+      }
+      
+    });
+  }
+
   render() {
     const { isLoading, error } = this.state;
 
@@ -178,14 +153,15 @@ class App extends React.Component {
           <Message data={data}/>
           <div className="panel-footer">
             <div className="btn-group">
-              <Reload onReload={this.reloadPages} />
+              <Reload title='Обновить JSON' onReload={this.reloadPagesJSON} />
+              <Reload title='Обновить GraphQL' onReload={this.reloadPagesGQL} />
             </div>
           </div>
         </div>
       );
     }
 
-    // отображаем сообщение во момент загрузки
+    // отображаем сообщение в момент загрузки
     if (isLoading) {
       let data={type:"info",title:"Подождите",message:"Идет загрузка статей..."};
       return <Message data={data}/>;
@@ -203,7 +179,8 @@ class App extends React.Component {
         />
         <div className="panel-footer">
           <div className="btn-group">
-            <Reload onReload={this.reloadPages} />
+              <Reload title='Обновить JSON' onReload={this.reloadPagesJSON} />
+              <Reload title='Обновить GraphQL' onReload={this.reloadPagesGQL} />
           </div>
         </div>        
       </div>

@@ -26,7 +26,8 @@ filewatcher = require('filewatcher'),
 watcher = filewatcher(),
 
 store = require("./store.js"),
-apiVersion1 = require("./api1.js");
+apiVersion1 = require("./api1.js"),
+apiGraphql = require("./graphql.js");
 
 const
 // сборщик
@@ -94,6 +95,9 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // апи версия 1
 app.use("/api/v1", apiVersion1);
+
+// подключаем GraphQL
+app.use(apiGraphql);
 
 // для безопасности
 app.disable('x-powered-by');
