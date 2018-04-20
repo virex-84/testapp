@@ -23,7 +23,7 @@ api = express.Router();
 const ArticleType = new graphql.GraphQLObjectType({
   name: 'Article',
     fields: {
-      _id: { type: graphql.GraphQLString  },
+      id: { type: graphql.GraphQLString  },
       title: { type: graphql.GraphQLString },
       text: { type: graphql.GraphQLString },
       description: { type: graphql.GraphQLString },
@@ -59,28 +59,97 @@ const schema = new graphql.GraphQLSchema({
 // схема данных на языке GraphQL
 // выглядит намного проще чем создание вручную
 var schema = graphql.buildSchema(`
+"This is an article"
 type Article {
-  _id: String
+  "Identification number of article"
+  id: String
   title: String
   text: String
   description: String
   author: String
 }
 
+"Array of articles"
 type Articles {
   items: [Article]
   count: String
 }
 
+"All queries"
 type Query {
+  "Get Articles or one article by ID"
   articles(id: ID): Articles
 }
+
+"Result of modifications"
+type Status {
+  message: String
+}
+
+"All modifications"
+type Mutation {
+  "New article"
+  newArticle(id:ID, title: String, text: String, description: String, author: String): Status
+  "Update article by ID"
+  updateArticle(id: ID, title: String, text: String, description: String, author: String):Status
+  "Delete article by ID"
+  deleteArticle(id: ID):Status
+}
+
 `);
+
+/*
+Примеры использования:
+
+query Query{
+  articles {
+    items {
+      id
+      title
+      text
+      description
+      author
+    }
+    count
+  }
+}
+
+query Query{
+  articles(id:1) {
+    items {
+      id
+      title
+      text
+      description
+      author
+    }
+  }
+}
+
+mutation Mutation {
+  newArticle (id:4,title:"title",text:"text",description:"description",author:"author") {
+    message
+  }
+}
+
+mutation Mutation {
+  updateArticle (id:4,title:"title4",text:"text4",description:"description",author:"author") {
+    message
+  }
+}
+mutation Mutation{
+  deleteArticle(id:1) {
+    message
+  }
+}  
+*/
 
 // обработка GraphQL запроса
 const resolver = {
+  
+    //выдача статей
     articles(args, req, request) {
-      
+
       let articles={
         items: [],
         count: store.articles.length
@@ -95,6 +164,48 @@ const resolver = {
       }
       
       return articles;
+    },
+
+    //новая статья
+    newArticle(args){
+      let index=store.articles.findIndex(x => x.id==args.id);
+
+      if (index>-1) {
+        return {message:"Already exists"};
+      } else {
+        store.articles.push(args);
+        return {message:"Added"};
+      }    
+
+    },
+    
+    //обновить статью
+    updateArticle(args){
+      let index=store.articles.findIndex(x => x.id==args.id);
+
+      if (index>-1) {
+        store.articles[index]=args;
+        return {message:"Updated"};
+      } else {
+        return {message:"Not found"}; 
+      }      
+      
+    },
+    
+    //удалить статью
+    deleteArticle(args){
+      try{
+        let index=store.articles.findIndex(x => x.id==args.id);
+
+        if (index>-1) {
+          store.articles.splice(index,1);
+        } else {
+          return {message:"Not found"}; 
+        }
+      }catch(error){
+        return {message:error.message};
+      }
+      return {message:"Deleted"};      
     }
 };
 

@@ -102,5 +102,6 @@
 	"save": "Сохранить",
 	"jquery + table": "jquery + table",
 	"You need to enable JavaScript to run this app": "Вам необходимо включить JavaScript что-бы запустить это приложение",
-	"React.js": "React.js"
+	"React.js": "React.js",
+	"last visit": "Последнее посещение"
 }

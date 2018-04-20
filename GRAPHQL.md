@@ -65,3 +65,24 @@ GraphQL позволяет взаимодействовать с серверо�
 }
 ```
 Что означает: "запросить статью с id==0".
+
+Примеры модификации:
+```
+mutation Mutation {
+  newArticle (id:4,title:"title",text:"text",description:"description",author:"author") {
+    message
+  }
+}
+
+mutation Mutation {
+  updateArticle (id:4,title:"title4",text:"text4",description:"description",author:"author") {
+    message
+  }
+}
+mutation Mutation{
+  deleteArticle(id:1) {
+    message
+  }
+}
+```
+Что соответственно: создать новую статью, обновить и удалить

@@ -7,25 +7,25 @@
 //================
 
 const articles=[{
-    _id:"1",
+    id:"1",
     title:"Title A",
     text:"text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1 text1",
     description:"some info about A",
     author:"author1"
   },{
-    _id:"2",
+    id:"2",
     title:"Title B",
     text:"text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2 text2",
     description:"description from B",
     author:"ivan"
   },{
-    _id:"3",
+    id:"3",
     title:"Some title C",
     text:"text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3 text3",
     description:"bla-bla-bla",
     author:"alex"
   },{
-    _id:"4",
+    id:"4",
     title:"About this site",
     text:"text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4 text4",
     description:"about text",
@@ -198,27 +198,27 @@ function prepareData(currentLink,log,locales,cssthemes){
   //список пользователей для отправки почты
   let mailusers=[];
   mailusers.push({
-    _id:1,
+    id:1,
     username:"user001"
   });
   mailusers.push({
-    _id:2,
+    id:2,
     username:"user002"
   });
   //письма-сообщения
   let mails=[];
   mails.push({
-    _id:1,
+    id:1,
     from:{username:"user001"},
     message:"hello!"
   });
   mails.push({
-    _id:2,
+    id:2,
     from:{username:"user002"},
     message:"message from user002!"
   });
   mails.push({
-    _id:3,
+    id:3,
     from:{username:"user002"},
     message:"how do you do?!"
   });   

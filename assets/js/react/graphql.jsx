@@ -27,7 +27,7 @@ const gqlAllArticles=gql`
 {
   articles {
     items {
-      _id
+      id
       title
       text
       description
@@ -44,7 +44,7 @@ const gqlArticle=gql`
 {
   articles (id:0){
     items {
-      _id
+      id
       title
       text
       description

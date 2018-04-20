@@ -2,7 +2,7 @@ div.panel.panel-default
 	div.panel-heading= t('article')
 	div.panel-body
 		form(id="article", method='post', action='/articles')
-			input(type="hidden",name="id",value=article._id)
+			input(type="hidden",name="id",value=article.id)
 			div.form-group
 				label= t('title')
 				input.form-control(type='text', name='title', value=article.title, placeholder=t('insert title') required)

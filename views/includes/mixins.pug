@@ -20,7 +20,7 @@ mixin listarticlesuser(items)
     input.form-control(id="listarticlesuser" type="text" placeholder=t('insert text for search'))
     ul.list-unstyled.components(id="listarticlesuser")
       each item in articles
-        a.list-group-item(href="/articles/read/"+item._id)=item.title
+        a.list-group-item(href="/articles/read/"+item.id)=item.title
 
 //- список статей для админа (упрощенный)            
 mixin listarticlesadminv1(items)
@@ -32,12 +32,12 @@ mixin listarticlesadminv1(items)
         i.glyphicon.glyphicon-plus.text-success
       each item in items
         li.list-group-item
-          a.btn(href="/articles/read/"+item._id+"?userrole=admin")=item.title
+          a.btn(href="/articles/read/"+item.id+"?userrole=admin")=item.title
           if user
             if user.role==1
               div.pull-right.action-buttons
-                a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin" title=t("edit"))
-                a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin" title=t("remove"))
+                a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item.id+"?userrole=admin" title=t("edit"))
+                a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item.id+"?userrole=admin" title=t("remove"))
                 
 //- список статей для админа (2 версия)
 mixin listarticlesadmintablev2(items)
@@ -60,15 +60,15 @@ mixin listarticlesadmintablev2(items)
                 i.glyphicon.glyphicon-plus.text-success
             each item in items
               tr
-                td.hidden-xs=item._id
+                td.hidden-xs=item.id
                 td(id="findtext")
-                  a(href="/articles/read/"+item._id+"?userrole=admin")=item.title
+                  a(href="/articles/read/"+item.id+"?userrole=admin")=item.title
                 td.hidden-xs(id="findtext")=item.description
                 td.hidden-xs(id="findtext")=item.author                
                 td
-                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin", title=t("edit"))
+                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item.id+"?userrole=admin", title=t("edit"))
                 td
-                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
+                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item.id+"?userrole=admin", title=t("remove"))
       div.panel-footer
         ul.pagination.hidden-xs
           li
@@ -104,15 +104,15 @@ mixin listarticlesadmintablev3(items)
                 i.glyphicon.glyphicon-plus.text-success
             each item in items
               tr
-                td.hidden-xs=item._id
+                td.hidden-xs=item.id
                 td
-                  a(href="/articles/read/"+item._id+"?userrole=admin")=item.title
+                  a(href="/articles/read/"+item.id+"?userrole=admin")=item.title
                 td.hidden-xs(id="findtext")=item.description
                 td.hidden-xs(id="findtext")=item.author                
                 td
-                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item._id+"?userrole=admin", title=t("edit"))
+                  a.btn.glyphicon.glyphicon-pencil(href="/articles/edit/"+item.id+"?userrole=admin", title=t("edit"))
                 td
-                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item._id+"?userrole=admin", title=t("remove"))
+                  a.btn.glyphicon.glyphicon-trash.text-danger(href="/articles/delete/"+item.id+"?userrole=admin", title=t("remove"))
       div.panel-footer
         ul.pagination.hidden-xs
           li
@@ -133,6 +133,7 @@ mixin listsessions(items)
           thead
             tr.filters
               th ID
+              th=t("last visit")
               th=t("theme")
               th=t("language")
               th=t("system")
@@ -143,6 +144,7 @@ mixin listsessions(items)
             each item in items
               tr
                 td=item.id
+                td=item.lastVisit       
                 td=item.theme
                 td=item.locale
                 td=typeof item.mobile !== "undefined" ? t("mobile") : t("desktop")
@@ -179,20 +181,20 @@ mixin listmail(mail,users)
                 td= item.from.username
                 td= item.message
                 td
-                  a.btn.btn-success.hidden-xs(href="/mail/reply/"+item._id)=t('reply')
-                  a.btn.glyphicon.glyphicon-share-alt.text-success.visible-xs(href="/mail/reply/"+item._id)              
+                  a.btn.btn-success.hidden-xs(href="/mail/reply/"+item.id)=t('reply')
+                  a.btn.glyphicon.glyphicon-share-alt.text-success.visible-xs(href="/mail/reply/"+item.id)              
                 td
-                  a.btn.btn-danger.hidden-xs(href="/mail/delete/"+item._id)=t('delete')
-                  a.btn.glyphicon.glyphicon-trash.text-danger.visible-xs(href="/mail/delete/"+item._id)
+                  a.btn.btn-danger.hidden-xs(href="/mail/delete/"+item.id)=t('delete')
+                  a.btn.glyphicon.glyphicon-trash.text-danger.visible-xs(href="/mail/delete/"+item.id)
     form.well(action="/mail/send",method="POST")
       legend=t('send message')
       div.form-group
         div.input-group
           span.input-group-addon
             i.glyphicon.glyphicon-user
-          select.form-control(name="_id")
+          select.form-control(name="id")
             for item in users
-              option(value=item._id) #{item.username}
+              option(value=item.id) #{item.username}
       div.form-group
         div.input-group
           span.input-group-addon

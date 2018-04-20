@@ -196,6 +196,8 @@ app.use(function (req, res, next) {
         req.session.mobile=1;
       } else {}
       
+      req.session.lastVisit=new Date().toISOString();
+      
       // fix
       // игнорируем apple-touch-icon.png, apple-touch-icon-precomposed.png и т.д. (apple-touch-icon*png)
       // что-бы не плодились лишние сессии от android или apple устройства которые запрашивают эти файлы для превью
@@ -224,7 +226,7 @@ function prepareRSS(url,host,items){
   for (var item of items){
     data.Feeds.push({
       title:item.title,
-      link:host+"/articles/read/"+item._id,
+      link:host+"/articles/read/"+item.id,
       description:item.description,
       author:item.author,
       pubDate:new Date()
@@ -312,7 +314,7 @@ app.route(['/','/:resource','/:resource/:command/:id'])
       // загружаем статью из массива
       if ((resource=='articles') && ((command=='read') || (command=='edit')) && (id)) {
          data.article=data.articles.filter(function(item) { 
-          return item._id == id; 
+          return item.id == id; 
         })[0];
         // если массив загружен - указываем команду для pug
         if (data.article) data.article.command=command;
