@@ -5,7 +5,7 @@ import React from "react";
 import { render } from "react-dom";
 
 import {JSONQuery} from "./ajax.jsx"; 
-import {gqlQuery, gqlResetStore, GET_ALL_ARTICLES, GET_ARTICLE} from "./graphql.jsx";
+import {gqlQuery, gqlMutate, gqlResetStore, GET_ALL_ARTICLES, GET_ARTICLE, DELETE_ARTICLE} from "./graphql.jsx";
 
 import Navigator from "./Navigator.jsx";
 import Footer from "./Footer.jsx";
@@ -42,6 +42,7 @@ class App extends React.Component {
     };
     this.backPage = this.backPage.bind(this);
     this.nextPage = this.nextPage.bind(this);
+    this.deletePage = this.deletePage.bind(this);
     this.reloadPagesJSON = this.reloadPagesJSON.bind(this);
     this.reloadPagesGQL = this.reloadPagesGQL.bind(this);
   }
@@ -81,6 +82,47 @@ class App extends React.Component {
       aloowNext: aloowNext
     });
   }
+  deletePage(e) {
+    e.preventDefault();
+    this.setState({ isLoading: true });
+    
+    // запрос
+    gqlMutate(this,DELETE_ARTICLE,{id: this.state.page.id},function(self, res, error){
+      if (res){
+        
+        let data;
+        
+        if (res.data.deleteArticle.result.count==0) {
+          data=Pages.slice(0);
+        } else {       
+          data=res.data.deleteArticle.result.items;
+        }
+
+        self.setState({
+          isLoading: false,
+          error: null,
+        
+          pages:data,
+          pageCount: data.length,
+          pageID: 0,          
+          page: data[0],
+          aloowBack: false,
+          aloowNext: true,
+          
+          message:res
+        });
+        gqlResetStore(); //сбрасываем кэш (заставляем клиент сделать последующий запрос к серверу заново)
+      }
+      
+      if (error) {
+        self.setState({
+          isLoading: false,
+          error:error
+        });
+      }
+      
+    });
+  }  
   
   reloadPagesJSON(e){
     e.preventDefault();
@@ -88,6 +130,11 @@ class App extends React.Component {
     // загружаем статьи, таймер - на 5 сек
     JSONQuery(this,5000,'articles',function(self,error,data){
       if (data) {
+        //если данные - пустые, добавляем по умолчанию
+        if (data.length==0) {
+          data=Pages.slice(0);
+        }
+        
         self.setState({
           isLoading: false,
           error: null,
@@ -100,6 +147,7 @@ class App extends React.Component {
           aloowNext: true
         });
       }
+      
       if (error) {
         self.setState({
           isLoading: false,
@@ -118,6 +166,10 @@ class App extends React.Component {
     //qlQuery(this,GET_ARTICLE,{id:0},function(self, res, error){
       if (res){
         let data=res.data.articles.items;
+        //если данные - пустые, добавляем по умолчанию
+        if (data.length==0) {
+          data=Pages.slice(0);
+        }         
         self.setState({
           isLoading: false,
           error: null,
@@ -130,7 +182,7 @@ class App extends React.Component {
           aloowNext: true
         });
         gqlResetStore(); //сбрасываем кэш (заставляем клиент сделать последующий запрос к серверу заново)
-      }
+      };
       
       if (error) {
         self.setState({
@@ -174,6 +226,7 @@ class App extends React.Component {
         <Footer
           onBack={this.backPage}
           onNext={this.nextPage}
+          onDelete={this.deletePage}
           aloowBack={this.state.aloowBack}
           aloowNext={this.state.aloowNext}
         />

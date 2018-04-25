@@ -5,6 +5,7 @@ class Footer extends React.Component {
     super(props);
     this.onBackClick = this.onBackClick.bind(this);
     this.onNextClick = this.onNextClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
   onBackClick(e) {
     e.preventDefault();
@@ -14,6 +15,10 @@ class Footer extends React.Component {
     e.preventDefault();
     this.props.onNext(e);
   }
+  onDeleteClick(e) {
+    e.preventDefault();
+    this.props.onDelete(e);
+  }  
   render() {
     return (
       <div className="panel-footer">
@@ -25,6 +30,9 @@ class Footer extends React.Component {
             Next
           </button>
         </div>
+          <button className="btn btn-primary pull-right" onClick={this.onDeleteClick} disabled={this.props.pageCount==1}>
+            Delete
+          </button>          
       </div>
     );
   }

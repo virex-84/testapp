@@ -17700,6 +17700,7 @@ var App = function (_React$Component) {
     };
     _this.backPage = _this.backPage.bind(_this);
     _this.nextPage = _this.nextPage.bind(_this);
+    _this.deletePage = _this.deletePage.bind(_this);
     _this.reloadPagesJSON = _this.reloadPagesJSON.bind(_this);
     _this.reloadPagesGQL = _this.reloadPagesGQL.bind(_this);
     return _this;
@@ -17742,6 +17743,48 @@ var App = function (_React$Component) {
       });
     }
   }, {
+    key: 'deletePage',
+    value: function deletePage(e) {
+      e.preventDefault();
+      this.setState({ isLoading: true });
+
+      // запрос
+      (0, _graphql.gqlMutate)(this, _graphql.DELETE_ARTICLE, { id: this.state.page.id }, function (self, res, error) {
+        if (res) {
+
+          var data = void 0;
+
+          if (res.data.deleteArticle.result.count == 0) {
+            data = Pages.slice(0);
+          } else {
+            data = res.data.deleteArticle.result.items;
+          }
+
+          self.setState({
+            isLoading: false,
+            error: null,
+
+            pages: data,
+            pageCount: data.length,
+            pageID: 0,
+            page: data[0],
+            aloowBack: false,
+            aloowNext: true,
+
+            message: res
+          });
+          (0, _graphql.gqlResetStore)(); //сбрасываем кэш (заставляем клиент сделать последующий запрос к серверу заново)
+        }
+
+        if (error) {
+          self.setState({
+            isLoading: false,
+            error: error
+          });
+        }
+      });
+    }
+  }, {
     key: 'reloadPagesJSON',
     value: function reloadPagesJSON(e) {
       e.preventDefault();
@@ -17749,6 +17792,11 @@ var App = function (_React$Component) {
       // загружаем статьи, таймер - на 5 сек
       (0, _ajax.JSONQuery)(this, 5000, 'articles', function (self, error, data) {
         if (data) {
+          //если данные - пустые, добавляем по умолчанию
+          if (data.length == 0) {
+            data = Pages.slice(0);
+          }
+
           self.setState({
             isLoading: false,
             error: null,
@@ -17761,6 +17809,7 @@ var App = function (_React$Component) {
             aloowNext: true
           });
         }
+
         if (error) {
           self.setState({
             isLoading: false,
@@ -17780,6 +17829,10 @@ var App = function (_React$Component) {
         //qlQuery(this,GET_ARTICLE,{id:0},function(self, res, error){
         if (res) {
           var data = res.data.articles.items;
+          //если данные - пустые, добавляем по умолчанию
+          if (data.length == 0) {
+            data = Pages.slice(0);
+          }
           self.setState({
             isLoading: false,
             error: null,
@@ -17792,7 +17845,7 @@ var App = function (_React$Component) {
             aloowNext: true
           });
           (0, _graphql.gqlResetStore)(); //сбрасываем кэш (заставляем клиент сделать последующий запрос к серверу заново)
-        }
+        };
 
         if (error) {
           self.setState({
@@ -17844,6 +17897,7 @@ var App = function (_React$Component) {
         _react2.default.createElement(_Footer2.default, {
           onBack: this.backPage,
           onNext: this.nextPage,
+          onDelete: this.deletePage,
           aloowBack: this.state.aloowBack,
           aloowNext: this.state.aloowNext
         }),
@@ -21204,6 +21258,7 @@ var Footer = function (_React$Component) {
 
     _this.onBackClick = _this.onBackClick.bind(_this);
     _this.onNextClick = _this.onNextClick.bind(_this);
+    _this.onDeleteClick = _this.onDeleteClick.bind(_this);
     return _this;
   }
 
@@ -21218,6 +21273,12 @@ var Footer = function (_React$Component) {
     value: function onNextClick(e) {
       e.preventDefault();
       this.props.onNext(e);
+    }
+  }, {
+    key: "onDeleteClick",
+    value: function onDeleteClick(e) {
+      e.preventDefault();
+      this.props.onDelete(e);
     }
   }, {
     key: "render",
@@ -21238,6 +21299,11 @@ var Footer = function (_React$Component) {
             { className: "btn btn-primary", onClick: this.onNextClick, disabled: !this.props.aloowNext },
             "Next"
           )
+        ),
+        _react2.default.createElement(
+          "button",
+          { className: "btn btn-primary pull-right", onClick: this.onDeleteClick, disabled: this.props.pageCount == 1 },
+          "Delete"
         )
       );
     }
@@ -21572,10 +21638,11 @@ exports.JSONQuery = JSONQuery;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.gqlResetStore = exports.gqlQuery = exports.GET_ARTICLE = exports.GET_ALL_ARTICLES = undefined;
+exports.gqlResetStore = exports.gqlMutate = exports.gqlQuery = exports.DELETE_ARTICLE = exports.GET_ARTICLE = exports.GET_ALL_ARTICLES = undefined;
 
 var _templateObject = _taggedTemplateLiteral(['\n{\n  articles {\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n    count\n  }\n}\n'], ['\n{\n  articles {\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n    count\n  }\n}\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n{\n  articles (id:0){\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n  }\n}\n'], ['\n{\n  articles (id:0){\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n  }\n}\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n{\n  articles (id:0){\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n  }\n}\n'], ['\n{\n  articles (id:0){\n    items {\n      id\n      title\n      text\n      description\n      author\n    }\n  }\n}\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\nmutation deleteArticle($id: ID!){\n  deleteArticle(id: $id) {\n    result {\n      items {\n        id\n        title\n        text\n        description\n        author\n      }\n      count\n    }\n    message\n  }\n}\n'], ['\nmutation deleteArticle($id: ID!){\n  deleteArticle(id: $id) {\n    result {\n      items {\n        id\n        title\n        text\n        description\n        author\n      }\n      count\n    }\n    message\n  }\n}\n']);
 
 var _graphqlTag = __webpack_require__(415);
 
@@ -21607,7 +21674,8 @@ var client = new _apolloClient.ApolloClient({
 });
 
 var GET_ALL_ARTICLES = 1,
-    GET_ARTICLE = 2;
+    GET_ARTICLE = 2,
+    DELETE_ARTICLE = 3;
 
 // шаблон запроса на все статьи
 var gqlAllArticles = (0, _graphqlTag2.default)(_templateObject);
@@ -21615,6 +21683,17 @@ var gqlAllArticles = (0, _graphqlTag2.default)(_templateObject);
 // шаблон запроса определенной статьи
 // должно быть articles (id:$id), для передачи параметров
 var gqlArticle = (0, _graphqlTag2.default)(_templateObject2);
+
+/*
+const gqldeleteArticle=gql`
+mutation Mutation{
+  deleteArticle(id: $id) {
+    message
+  }
+}
+`;
+*/
+var gqldeleteArticle = (0, _graphqlTag2.default)(_templateObject3);
 
 // сам запрос
 var gqlQuery = function gqlQuery(self, action, args, callback) {
@@ -21635,6 +21714,20 @@ var gqlQuery = function gqlQuery(self, action, args, callback) {
   });
 };
 
+var gqlMutate = function gqlMutate(self, action, args, callback) {
+  var gqlAction = void 0;
+  switch (action) {
+    case DELETE_ARTICLE:
+      gqlAction = gqldeleteArticle;
+      break;
+  }
+  client.mutate({ mutation: gqlAction, variables: args }).then(function (data) {
+    callback(self, data, null);
+  }).catch(function (err) {
+    callback(self, null, err);
+  });
+};
+
 // сброс кеша (заставляем клиент сделать запрос к серверу заново)
 var gqlResetStore = function gqlResetStore(self, callback) {
   client.resetStore();
@@ -21642,7 +21735,9 @@ var gqlResetStore = function gqlResetStore(self, callback) {
 
 exports.GET_ALL_ARTICLES = GET_ALL_ARTICLES;
 exports.GET_ARTICLE = GET_ARTICLE;
+exports.DELETE_ARTICLE = DELETE_ARTICLE;
 exports.gqlQuery = gqlQuery;
+exports.gqlMutate = gqlMutate;
 exports.gqlResetStore = gqlResetStore;
 
 /***/ }),

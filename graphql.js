@@ -83,6 +83,7 @@ type Query {
 
 "Result of modifications"
 type Status {
+  result: Articles
   message: String
 }
 
@@ -144,26 +145,26 @@ mutation Mutation{
 }  
 */
 
+function getResult(id){
+  let articles={
+    items: [],
+    count: store.articles.length
+  };
+  if (id) {
+    articles.items.push(store.articles[id]);
+    count: articles.items.length;
+  } else {
+    articles.items=store.articles.slice();
+  }
+  return articles; 
+}
+
 // обработка GraphQL запроса
 const resolver = {
   
     //выдача статей
     articles(args, req, request) {
-
-      let articles={
-        items: [],
-        count: store.articles.length
-      };
-      
-      // если указан аргумент - ищем элемент
-      if (args.id){
-        articles.items.push(store.articles[args.id]);
-      } else {
-      // иначе выводим всё
-        articles.items=store.articles.slice();
-      }
-      
-      return articles;
+      return getResult(args.id);
     },
 
     //новая статья
@@ -171,10 +172,10 @@ const resolver = {
       let index=store.articles.findIndex(x => x.id==args.id);
 
       if (index>-1) {
-        return {message:"Already exists"};
+        return {result:getResult(), message:"Already exists"};
       } else {
         store.articles.push(args);
-        return {message:"Added"};
+        return {result:getResult(), message:"Added"};
       }    
 
     },
@@ -185,9 +186,9 @@ const resolver = {
 
       if (index>-1) {
         store.articles[index]=args;
-        return {message:"Updated"};
+        return {result:getResult(), message:"Updated"};
       } else {
-        return {message:"Not found"}; 
+        return {result:getResult(), message:"Not found"}; 
       }      
       
     },
@@ -200,12 +201,12 @@ const resolver = {
         if (index>-1) {
           store.articles.splice(index,1);
         } else {
-          return {message:"Not found"}; 
+          return {result:getResult(), message:"Not found"}; 
         }
       }catch(error){
-        return {message:error.message};
+        return {result:getResult(), message:error.message};
       }
-      return {message:"Deleted"};      
+      return {result:getResult(), message:"Deleted"};      
     }
 };
 
